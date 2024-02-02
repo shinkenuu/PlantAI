@@ -1,10 +1,8 @@
-from datetime import datetime
-from types import UnionType
-from typing import Any
 from dataclasses import dataclass
 from functools import lru_cache
 
 import numpy as np
+
 
 @dataclass
 class Sensor:
@@ -29,17 +27,16 @@ class Sensor:
     @lru_cache
     def compare(self, other: "Sensor") -> dict:
         diff = {
-            "air_humidity_diff": abs(self.air_humidity) - abs(other.air_humidity),
-            "air_temperature_diff": abs(self.air_temperature)
-            - abs(other.air_temperature),
-            "soil_humidity_diff": abs(self.soil_humidity) - abs(other.soil_humidity),
-            "soil_ph_diff": abs(self.soil_ph) - abs(other.spoil_ph),
-            "light_level_diff": abs(self.light_level) - abs(other.light_level),
+            "air_humidity_diff": self.air_humidity - other.air_humidity,
+            "air_temperature_diff": self.air_temperature - other.air_temperature,
+            "soil_humidity_diff": self.soil_humidity - other.soil_humidity,
+            "soil_ph_diff": self.soil_ph - other.spoil_ph,
+            "light_level_diff": self.light_level - other.light_level,
         }
 
         return diff
 
-    def distance_to(self, other: "Sensor") -> float:
+    def __sub__(self, other: "Sensor") -> float:
         comparison = self.compare(other)
 
         diff = sum(
@@ -55,7 +52,7 @@ class Sensor:
         return diff
 
     def __eq__(self, __value: object) -> bool:
-        diff = self.distance_to(__value)
+        diff = self - __value
         return diff == 0
 
 
@@ -87,8 +84,8 @@ class Plant:
         light_level=0.95,
     )
 
-    visual_description: str = "a skull with a cactus inside that looks like a tiny peak of pinecone forest at the low of winter"
-    personality: str = "lazy, usually bored and forever curious"
+    visual_description: str = "a skull with a cactus inside. the cactus looks like a tiny pinecone canupy with snow"
+    personality: str = "lazy, easily bored and forever curious"
     # Comes from sensor
 
     @property
@@ -151,7 +148,7 @@ class Plant:
         if self.is_hungry:
             im_feeling.append("hungry")
         else:
-            im_feeling.append("feed")
+            im_feeling.append("fed")
 
         if not im_feeling:
             return "Im feeling nothing"
@@ -160,4 +157,4 @@ class Plant:
         return _
 
     def introduce(self):
-        return f"Hi, I'm {self.name}. But can call me {self.nickname}."
+        return f"I'm {self.name}. They call me {self.nickname}."
