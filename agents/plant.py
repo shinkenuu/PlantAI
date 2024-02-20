@@ -84,7 +84,9 @@ class Plant:
         light_level=0.95,
     )
 
-    visual_description: str = "a skull with a cactus inside. the cactus looks like a tiny pinecone canupy with snow"
+    visual_description: str = (
+        "a skull with a cactus inside. the cactus looks like a tiny pinecone canupy with snow"
+    )
     personality: str = "lazy, easily bored and forever curious"
     # Comes from sensor
 
@@ -106,24 +108,32 @@ class Plant:
         air temperature <= z_score([min, max], self)
         """
         ideal_mean_air_temperature = np.mean(
-            [self.ideal_min_sensor, self.ideal_max_sensor]
+            [
+                self.ideal_min_sensor.air_temperature,
+                self.ideal_max_sensor.air_temperature,
+            ]
         )
         ideal_std_air_temperature = np.std(
-            [self.ideal_min_sensor, self.ideal_max_sensor]
+            [
+                self.ideal_min_sensor.air_temperature,
+                self.ideal_max_sensor.air_temperature,
+            ]
         )
 
         warmness_score = (
-            self.air_temperature - ideal_mean_air_temperature
+            self.sensor.air_temperature - ideal_mean_air_temperature
         ) / ideal_std_air_temperature
 
         return warmness_score > warmness_baseline
 
     @property
-    def is_hungry(self, baseline_soil_ph=1):
-        ideal_mean_soil_ph = np.mean([self.ideal_min_sensor, self.ideal_max_sensor])
+    def is_hungry(self, soil_ph_baseline: float = 1):
+        ideal_mean_soil_ph = np.mean(
+            [self.ideal_min_sensor.soil_ph, self.ideal_max_sensor.soil_ph]
+        )
 
-        soil_ph_score = abs(abs(self.soil_ph) - ideal_mean_soil_ph)
-        return soil_ph_score > baseline_soil_ph
+        soil_ph_score = abs(abs(self.sensor.soil_ph) - ideal_mean_soil_ph)
+        return soil_ph_score > soil_ph_baseline
 
     # @property
     # def in_the_dark(self, baseline_light_level: float=.4) -> bool:
@@ -131,29 +141,27 @@ class Plant:
 
     @property
     def feeling(self) -> str:
-        im_feeling = []
+        feelings = []
 
         if self.is_thirsty:
-            im_feeling.append("thirsty")
+            feelings.append("thirsty")
 
         if self.is_cold:
-            im_feeling.append("cold")
+            feelings.append("cold")
 
         elif not self.is_warm:
-            im_feeling.append("chilly")
+            feelings.append("chilly")
 
         else:
-            im_feeling.append("warm")
+            feelings.append("warm")
 
         if self.is_hungry:
-            im_feeling.append("hungry")
-        else:
-            im_feeling.append("fed")
+            feelings.append("hungry")
 
-        if not im_feeling:
+        if not feelings:
             return "Im feeling nothing"
 
-        _ = f"Im feeling {', '.join(im_feeling)}"
+        _ = f"Im feeling {', '.join(feelings)}"
         return _
 
     def introduce(self):

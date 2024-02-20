@@ -3,9 +3,6 @@ import logging
 
 from langchain_core.tools import tool
 
-from . import plant, persona, progmancer
-
-
 @tool
 def read_news(query: Annotated[str, "query to select news"]) -> list[str]:
     """Read online personaly relevant news"""
@@ -27,8 +24,5 @@ def search_online(query: str) -> str:
 
 TOOLS = [
     read_news,
-    search_online,
-    progmancer.prog_rock_search,
-    persona.summarize_activity,
-    plant.sense,
+    search_online
 ]

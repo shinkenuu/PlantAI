@@ -12,7 +12,6 @@ def get_llm(model="gpt-3.5-turbo", temperature=0, **kwargs):
     _llm = ChatOpenAI(
         model=model,
         temperature=temperature,
-        openai_api_key="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",
         **kwargs
     )
     return _llm
