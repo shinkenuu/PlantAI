@@ -1,0 +1,106 @@
+[
+    {
+        "id": 1,
+        "name": "Alba",
+        "scientific_name": "Haworthia fasciata",
+        "actual_sensor": {
+            "air_humidity": 40.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 30.0,
+            "soil_ph": 6.5,
+            "light_level": 1000
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 30.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 20.0,
+            "soil_ph": 6.0,
+            "light_level": 500
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 25.0,
+            "soil_humidity": 40.0,
+            "soil_ph": 7.0,
+            "light_level": 2000
+        }
+    },
+    {
+        "id": 2,
+        "name": "Peter",
+        "scientific_name": "Daucus carota",
+        "actual_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 70.0,
+            "soil_ph": 6.8,
+            "light_level": 4000
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 15.0,
+            "soil_humidity": 60.0,
+            "soil_ph": 6.5,
+            "light_level": 2000
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 70.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 80.0,
+            "soil_ph": 7.0,
+            "light_level": 6000
+        }
+    },
+    {
+        "id": 3,
+        "name": "Violet",
+        "scientific_name": "Saintpaulia ionantha",
+        "actual_sensor": {
+            "air_humidity": 70.0,
+            "air_temperature": 20.0,
+            "soil_humidity": 80.0,
+            "soil_ph": 6.0,
+            "light_level": 800
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 70.0,
+            "soil_ph": 5.5,
+            "light_level": 500
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 80.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 90.0,
+            "soil_ph": 6.5,
+            "light_level": 1000
+        }
+    },
+    {
+        "id": 4,
+        "name": "Tilla",
+        "scientific_name": "Tillandsia cyanea",
+        "actual_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 25.0,
+            "soil_humidity": 50.0,
+            "soil_ph": 5.5,
+            "light_level": 1500
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 40.0,
+            "soil_ph": 5.0,
+            "light_level": 1000
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 70.0,
+            "air_temperature": 28.0,
+            "soil_humidity": 6,
+            "soil_ph": 6.0,
+            "light_level": 2000
+        }
+    }
+]
