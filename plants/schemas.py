@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import json
 from functools import lru_cache
 
 from numpy import mean, std
@@ -35,6 +36,15 @@ class Sensor:
         }
 
         return diff
+    
+    def to_dict(self):
+        return {
+            "air_humidity": self.air_humidity,
+            "air_temperature": self.air_temperature,
+            "soil_humidity": self.soil_humidity,
+            "soil_ph": self.soil_ph,
+            "light_level": self.light_level,
+        }
 
     def __sub__(self, other: "Sensor") -> float:
         comparison = self.compare(other)
@@ -66,20 +76,31 @@ class Plant:
     ideal_max_sensor: Sensor
 
     def __str__(self):
-        return f"#{self.id} {self.name}"
+        self_dict = self.to_dict()
+        return json.dumps(self_dict)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "scientific_name": self.scientific_name,
+            "actual_sensor": self.actual_sensor.to_dict(),
+            "ideal_min_sensor": self.ideal_min_sensor.to_dict(),
+            "ideal_max_sensor": self.ideal_max_sensor.to_dict(),
+        }
 
     @property
     def is_thirsty(self):
         return (
             self.ideal_min_sensor.soil_humidity
-            <= self.sensor.soil_humidity
+            <= self.actual_sensor.soil_humidity
             < self.ideal_max_sensor.soil_humidity
         )
 
     @property
     def is_cold(self):
-        return self.ideal_min_sensor.air_temperature <= self.sensor.soil_humidity
-
+        return self.ideal_min_sensor.air_temperature <= self.actual_sensor.soil_humidity
+    
     @property
     def is_warm(self, warmness_baseline: float = 0.3):
         """
@@ -99,7 +120,7 @@ class Plant:
         )
 
         warmness_score = (
-            self.sensor.air_temperature - ideal_mean_air_temperature
+            self.actual_sensor.air_temperature - ideal_mean_air_temperature
         ) / ideal_std_air_temperature
 
         return warmness_score > warmness_baseline
@@ -110,7 +131,7 @@ class Plant:
             [self.ideal_min_sensor.soil_ph, self.ideal_max_sensor.soil_ph]
         )
 
-        soil_ph_score = abs(abs(self.sensor.soil_ph) - ideal_mean_soil_ph)
+        soil_ph_score = abs(abs(self.actual_sensor.soil_ph) - ideal_mean_soil_ph)
         return soil_ph_score > soil_ph_baseline
 
     # @property
@@ -127,11 +148,11 @@ class Plant:
         if self.is_cold:
             feelings.append("cold")
 
-        elif not self.is_warm:
-            feelings.append("chilly")
+        elif self.is_warm:
+            feelings.append("warm")
 
         else:
-            feelings.append("warm")
+            feelings.append("chilly")
 
         if self.is_hungry:
             feelings.append("hungry")
@@ -142,5 +163,6 @@ class Plant:
         _ = f"Im feeling {', '.join(feelings)}"
         return _
 
-    def introduce(self):
-        return f"I'm {self.name}. They call me {self.nickname}."
+    @property
+    def identity(self) -> str:
+        return f"{self.scientific_name} called {self.name}."

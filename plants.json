@@ -56,7 +56,7 @@
         "name": "Violet",
         "scientific_name": "Saintpaulia ionantha",
         "actual_sensor": {
-            "air_humidity": 70.0,
+            "air_humidity": 50.0,
             "air_temperature": 20.0,
             "soil_humidity": 80.0,
             "soil_ph": 6.0,

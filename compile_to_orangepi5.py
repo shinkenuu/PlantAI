@@ -22,7 +22,7 @@ def load_transformers_model(
 # ============= PROFILING ============= #
 
 
-def profile(session: "rknn.Session" = None):
+def profile(session=None):
     import rknn
 
     session = session or rknn.Session()
@@ -41,7 +41,7 @@ def profile(session: "rknn.Session" = None):
 # ============= OPTIMIZATION ============= #
 
 
-def profile(session: "rknn.Session" = None):
+def optimize(session=None):
     import rknn
 
     session = session or rknn.Session()
@@ -61,9 +61,7 @@ def profile(session: "rknn.Session" = None):
 # ============= COMPILATION ============= #
 
 
-def compile(
-    session: "rknn.Session" = None, target: str = "rk3588", device: str = "rk3588-xu"
-):
+def compile(session=None, target: str = "rk3588", device: str = "rk3588-xu"):
     import rknn
 
     session = session or rknn.Session()
