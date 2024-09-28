@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "plantai"
 version = "0.1.0"
-description = ""
+description = "Plants meet AI for self-caring, self-knowledge and improved human interfacing"
 authors = ["Shinkenuu <shinkenuu@gmail.com>"]
 readme = "README.md"
 

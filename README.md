@@ -1,15 +1,17 @@
-### Framework
+### PlantAI
 
-![agent framework containing profile, memory, planning, action](./agent_framework.png)
+Plants meet AI for self-caring, self-knowledge and improved human interfacing
 
 
+### LLM inference
+
+- OrangePi 5 [Plus|Pro]
+
+[Setup a SBC with GPU to run LLMs](https://github.com/serialscriptr/Orange-PI-5-Pro-MLC-LLM)
 
 ### Plant interfaces
 
-##### Arduino
+- Arduino
 
 Communication with Arduino using its default serial UART.
 Here's the expected running [Arduino sketch](https://github.com/shinkenuu/arduino/blob/master/plantai)
-
-References
-- https://forum.arduino.cc/t/python-wont-read-serial-data-the-same-way-that-the-arduino-serial-monitor-does/502633

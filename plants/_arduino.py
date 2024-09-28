@@ -2,6 +2,7 @@
 This is a wannabe Singleton.
 Due to the fact that a mere instantiation of Serial
  with the Arduino port resets the MCU (losing all stored plants).
+See https://forum.arduino.cc/t/python-wont-read-serial-data-the-same-way-that-the-arduino-serial-monitor-does/502633
 """
 
 import json
