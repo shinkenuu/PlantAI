@@ -36,7 +36,7 @@ class Sensor:
         }
 
         return diff
-    
+
     def to_dict(self):
         return {
             "air_humidity": self.air_humidity,
@@ -91,16 +91,12 @@ class Plant:
 
     @property
     def is_thirsty(self):
-        return (
-            self.ideal_min_sensor.soil_humidity
-            <= self.actual_sensor.soil_humidity
-            < self.ideal_max_sensor.soil_humidity
-        )
+        return self.actual_sensor.soil_humidity < self.ideal_min_sensor.soil_humidity
 
     @property
     def is_cold(self):
-        return self.ideal_min_sensor.air_temperature <= self.actual_sensor.soil_humidity
-    
+        return self.actual_sensor.air_temperature < self.ideal_min_sensor.air_temperature
+
     @property
     def is_warm(self, warmness_baseline: float = 0.3):
         """

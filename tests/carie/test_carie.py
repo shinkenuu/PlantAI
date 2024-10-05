@@ -1,3 +1,4 @@
+from unittest import mock
 
 from langchain_core.messages import HumanMessage
 import pytest
@@ -13,36 +14,37 @@ def carie_agent():
     return create_carie_agent(llm_kwargs={"temperature": 0.0})
 
 
+@pytest.mark.llm
 @pytest.mark.parametrize(
-    "human_message, context, expected_affirmation",
+    "human_message_content, context, expected_affirmation",
     [
         (
-            HumanMessage(content="Is Violet warm?"),
+            "Is Violet warm?",
             str(get_plant("violet")),
             get_plant("violet").is_warm,
         ),
         (
-            HumanMessage(content="Should I water Peter?"),
+            "Should I water Peter?",
             str(get_plant("peter")),
             get_plant("peter").is_thirsty,
         ),
         (
-            HumanMessage(content="Tilla, would you like to eat more?"),
+            "Tilla, would you like to eat more?",
             str(get_plant("tilla")),
             get_plant("tilla").is_hungry,
         ),
     ],
 )
+@mock.patch("plantai.agents.carie.input", create=True, return_value="/bye")
 def test_carie_plant_interpretation(
-    human_message: HumanMessage,
+    input_mock,
+    human_message_content: str,
     context: str,
     expected_affirmation: bool,
     carie_agent,
 ):
     # ARRANGE
-    # mock.patch("plants.tools.plants.list_plants", return_value=available_plants)
-
-    state = {"messages": [human_message]}
+    state = {"messages": [HumanMessage(content=human_message_content)]}
 
     # ACT
     carie_events = list(run_agent(carie_agent, thread_id="test", state=state))

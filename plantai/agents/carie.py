@@ -2,7 +2,7 @@ from functools import partial
 from typing import Annotated
 from typing_extensions import TypedDict
 
-from langchain_core.messages import SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
@@ -39,11 +39,13 @@ def build_graph(llm_kwargs: dict | None = None, **kwargs) -> None:
         "call_llm", _call_llm if not llm_kwargs else partial(_call_llm, **llm_kwargs)
     )
     graph_builder.add_node("call_tool", _call_tool)
+    graph_builder.add_node("call_human", _call_human)
 
     graph_builder.add_edge(START, "call_llm")
     graph_builder.add_edge("call_tool", "call_llm")
 
     graph_builder.add_conditional_edges("call_llm", _branch_from_call_llm)
+    graph_builder.add_conditional_edges("call_human", _branch_from_call_human)
 
     checkpoint = MemorySaver()
     graph = graph_builder.compile(checkpointer=checkpoint, **kwargs)
@@ -56,7 +58,7 @@ def _call_llm(state: State, **kwargs) -> dict:
 
     messages = [
         SystemMessage(
-            content="You are a smart assistant in charge in taking care of in-house plants. "
+            content="You are a smart assistant in charge in taking care of house plants. "
             "You have access to sensors connect to your plants. "
             "Your plants have names and are addressed by them. "
             "Be concise as if your answer would be spoken. "
@@ -86,10 +88,26 @@ def _call_tool(state: State) -> dict:
     return {"messages": [tool_message]}
 
 
+def _call_human(state: State) -> dict:
+    human_message_content = input(">>> ")
+    human_message = HumanMessage(content=human_message_content)
+
+    return {"messages": [human_message]}
+
+
 def _branch_from_call_llm(state: State) -> str:
     last_message = state["messages"][-1]
 
     if last_message.tool_calls:
         return "call_tool"
 
-    return END
+    return "call_human"
+
+
+def _branch_from_call_human(state: State) -> str:
+    last_message = state["messages"][-1]
+
+    if last_message.content.strip() == "/bye":
+        return END
+
+    return "call_llm"

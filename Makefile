@@ -1,10 +1,10 @@
 clean-cache:
 	find . | grep pycache | xargs rm -r
 
-tests:
+test:
 	pytest -vvv -m "not arduino"
 
-tests-all:
+test-all:
 	pytest -vvv
 
 lint:
