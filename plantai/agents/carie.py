@@ -2,11 +2,11 @@ from functools import partial
 from typing import Annotated
 from typing_extensions import TypedDict
 
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
-from langgraph.prebuilt import ToolExecutor, ToolInvocation
+from langgraph.prebuilt import ToolNode
 
 from plantai.llms import get_llm
 from plants.tools import (
@@ -38,7 +38,7 @@ def build_graph(llm_kwargs: dict | None = None, **kwargs) -> None:
     graph_builder.add_node(
         "call_llm", _call_llm if not llm_kwargs else partial(_call_llm, **llm_kwargs)
     )
-    graph_builder.add_node("call_tool", _call_tool)
+    graph_builder.add_node("call_tool", ToolNode(tools=_TOOLS))
     graph_builder.add_node("call_human", _call_human)
 
     graph_builder.add_edge(START, "call_llm")
@@ -67,25 +67,6 @@ def _call_llm(state: State, **kwargs) -> dict:
 
     llm_message = llm.invoke(messages)
     return {"messages": [llm_message]}
-
-
-def _call_tool(state: State) -> dict:
-    last_message = state["messages"][-1]
-    tool_call = last_message.tool_calls[0]
-
-    tool_invocation = ToolInvocation(
-        tool=tool_call["name"], tool_input=tool_call["args"]
-    )
-    tool_executor = ToolExecutor(tools=_TOOLS)
-
-    tool_output = tool_executor.invoke(tool_invocation)
-    tool_message = ToolMessage(
-        content=str(tool_output),
-        name=tool_invocation.tool,
-        tool_call_id=tool_call["id"],
-    )
-
-    return {"messages": [tool_message]}
 
 
 def _call_human(state: State) -> dict:
