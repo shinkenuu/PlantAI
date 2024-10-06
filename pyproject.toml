@@ -7,18 +7,20 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-langgraph = "^0.2.19"
-langchain = "^0.2.16"
-langchain-ollama = "^0.1.3"
-langchain-community = "^0.2.16"
-wikipedia = "^1.4.0"
 pydantic = "^2.9.0"
 pyserial = "^3.5"
+langgraph = "^0.2.34"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"
 pytest = "^8.3.2"
 factory-boy = "^3.3.1"
+
+[tool.poetry.group.ollama.dependencies]
+langchain-ollama = "^0.2.0"
+
+[tool.poetry.group.openai.dependencies]
+langchain-openai = "^0.2.2"
 
 [tool.pytest.ini_options]
 markers = [
