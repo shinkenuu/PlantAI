@@ -1,7 +1,7 @@
 from langchain_core.pydantic_v1 import BaseModel
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from plantai.llms import get_llm
+from plantai.llms import get_ollama_llm
 
 prompt = """You are an affirmation generator. 
 Let's think step-by-step and verify if the following statement is true or false given only the context.
@@ -20,7 +20,7 @@ class Affirmation(BaseModel):
 
 
 def verify_affirmation(context: str, statement: str) -> Affirmation:
-    llm = get_llm(temperature=0.0)
+    llm = get_ollama_llm(temperature=0.0)
     structured_llm = llm.with_structured_output(Affirmation)
     messages = [
         SystemMessage(content=prompt.format(context=context, statement=statement)),

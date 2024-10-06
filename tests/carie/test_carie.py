@@ -5,13 +5,20 @@ import pytest
 
 from plantai.agents import run_agent
 from plantai.agents.carie import build_graph as create_carie_agent
+from plantai.llms import get_ollama_llm
 from plants import get_plant
 from tests.carie.affirmation import is_true_affirmation
 
 
 @pytest.fixture(scope="module")
-def carie_agent():
-    return create_carie_agent(llm_kwargs={"temperature": 0.0})
+def ollama_llm():
+    llm = get_ollama_llm(temperature=0.0)
+    return llm
+
+
+@pytest.fixture(scope="module")
+def carie_agent(ollama_llm):
+    return create_carie_agent(llm=ollama_llm)
 
 
 @pytest.mark.llm
@@ -52,5 +59,7 @@ def test_carie_plant_interpretation(
     # ASSERT
     last_event = carie_events[-1]
     last_event_message_content = last_event["messages"][-1].content
-    last_event_affirmation = is_true_affirmation(context=context, statement=last_event_message_content)
+    last_event_affirmation = is_true_affirmation(
+        context=context, statement=last_event_message_content
+    )
     assert last_event_affirmation == expected_affirmation

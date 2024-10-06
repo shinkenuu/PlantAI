@@ -1,14 +1,11 @@
 from functools import partial
-from typing import Annotated
-from typing_extensions import TypedDict
 
+from langchain_core.language_models import BaseChatModel
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import StateGraph, START, END
-from langgraph.graph.message import add_messages
+from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.prebuilt import ToolNode
 
-from plantai.llms import get_llm
 from plants.tools import (
     get_plant,
     list_plants,
@@ -28,17 +25,14 @@ _TOOLS = [
 ]
 
 
-class State(TypedDict):
-    messages: Annotated[list, add_messages]
+def build_graph(llm: BaseChatModel, **kwargs) -> None:
+    graph_builder = StateGraph(MessagesState)
 
+    call_llm = partial(_call_llm, llm=llm)
+    call_tool = ToolNode(tools=_TOOLS)
 
-def build_graph(llm_kwargs: dict | None = None, **kwargs) -> None:
-    graph_builder = StateGraph(State)
-
-    graph_builder.add_node(
-        "call_llm", _call_llm if not llm_kwargs else partial(_call_llm, **llm_kwargs)
-    )
-    graph_builder.add_node("call_tool", ToolNode(tools=_TOOLS))
+    graph_builder.add_node("call_llm", call_llm)
+    graph_builder.add_node("call_tool", call_tool)
     graph_builder.add_node("call_human", _call_human)
 
     graph_builder.add_edge(START, "call_llm")
@@ -52,9 +46,8 @@ def build_graph(llm_kwargs: dict | None = None, **kwargs) -> None:
     return graph
 
 
-def _call_llm(state: State, **kwargs) -> dict:
-    llm = get_llm(**kwargs)
-    llm = llm.bind_tools(_TOOLS)
+def _call_llm(state: MessagesState, llm: BaseChatModel) -> dict:
+    llm_with_tools = llm.bind_tools(_TOOLS)
 
     messages = [
         SystemMessage(
@@ -65,18 +58,18 @@ def _call_llm(state: State, **kwargs) -> dict:
         )
     ] + state["messages"][-7:]
 
-    llm_message = llm.invoke(messages)
+    llm_message = llm_with_tools.invoke(messages)
     return {"messages": [llm_message]}
 
 
-def _call_human(state: State) -> dict:
+def _call_human(state: MessagesState) -> dict:
     human_message_content = input(">>> ")
     human_message = HumanMessage(content=human_message_content)
 
     return {"messages": [human_message]}
 
 
-def _branch_from_call_llm(state: State) -> str:
+def _branch_from_call_llm(state: MessagesState) -> str:
     last_message = state["messages"][-1]
 
     if last_message.tool_calls:
@@ -85,7 +78,7 @@ def _branch_from_call_llm(state: State) -> str:
     return "call_human"
 
 
-def _branch_from_call_human(state: State) -> str:
+def _branch_from_call_human(state: MessagesState) -> str:
     last_message = state["messages"][-1]
 
     if last_message.content.strip() == "/bye":
