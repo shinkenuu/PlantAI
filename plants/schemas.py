@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 import json
 from functools import lru_cache
-
-from numpy import mean, std
+from statistics import mean, stdev
 
 
 @dataclass
@@ -108,7 +107,7 @@ class Plant:
                 self.ideal_max_sensor.air_temperature,
             ]
         )
-        ideal_std_air_temperature = std(
+        ideal_std_air_temperature = stdev(
             [
                 self.ideal_min_sensor.air_temperature,
                 self.ideal_max_sensor.air_temperature,
