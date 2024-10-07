@@ -1,31 +1,28 @@
 import json
+import logging
 
 from config import FILE_REPOSITORY_JSON_PATH
-from plants.schemas import Plant, Sensor
-
+from plants.schemas import Plant
 
 
 def list_plants(*args) -> list[Plant]:
-    plants_json = None
+    logging.info(f"Reading plants in {FILE_REPOSITORY_JSON_PATH}")
+    plants = []
 
     with open(FILE_REPOSITORY_JSON_PATH) as file:
         plants_json = json.load(file)
 
-    plants = []
+    plants = [Plant.from_dict(plant_json) for plant_json in plants_json]
 
-    for plant_json in plants_json:
-        plant_json["actual_sensor"] = Sensor(**plant_json["actual_sensor"])
-        plant_json["ideal_min_sensor"] = Sensor(**plant_json["ideal_min_sensor"])
-        plant_json["ideal_max_sensor"] = Sensor(**plant_json["ideal_max_sensor"])
-
-        plant = Plant(**plant_json)
-        plants.append(plant)
-
+    logging.info(f"Read {len(plants)} plants in {FILE_REPOSITORY_JSON_PATH}")
     return plants
 
 
 def get_plant(name: str) -> Plant | None:
+    logging.info(f"Retrieving plant with {name=}")
+
     if not name:
+        logging.warning("No plant name provided")
         return None
 
     lower_name = name.lower()
@@ -33,4 +30,5 @@ def get_plant(name: str) -> Plant | None:
     plants = list_plants()
     plant = next((plant for plant in plants if plant.name.lower() == lower_name), None)
 
+    logging.info(f"Retrieved plant {plant}")
     return plant

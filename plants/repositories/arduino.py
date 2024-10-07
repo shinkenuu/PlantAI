@@ -1,4 +1,5 @@
 import json
+import logging
 
 from config import ARDUINO_REPOSITORY_JSON_PATH
 from plants.io import arduino as _arduino
@@ -11,8 +12,12 @@ class ArduinoPlantRepository(BasePlantRepository):
         self._cache = {}
 
     def restore_plants_from_json(self, json_path: str = ARDUINO_REPOSITORY_JSON_PATH):
+        logging.info(f"Reading plants in {json_path}")
+
         with open(json_path) as file:
             plants_json = json.load(file)
+
+        logging.info(f"Read {len(plants_json)} plants in {json_path}")
 
         for plant_json in plants_json:
             plant = Plant.from_dict(plant_json)

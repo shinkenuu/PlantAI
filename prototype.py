@@ -1,5 +1,6 @@
-from langchain_core.messages import HumanMessage
+import logging
 
+from langchain_core.messages import HumanMessage
 
 from plantai.llms import (
     # get_openai_llm,
@@ -7,6 +8,7 @@ from plantai.llms import (
 )
 from plantai.agents import run_carie
 
+logging.basicConfig(level=logging.INFO)
 
 carie_state = {"messages": [HumanMessage("How is Violet doing today?")]}
 
