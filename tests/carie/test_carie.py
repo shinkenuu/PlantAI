@@ -6,7 +6,7 @@ import pytest
 from plantai.agents import run_agent
 from plantai.agents.carie import build_graph as create_carie_agent
 from plantai.llms import get_ollama_llm
-from plants import get_plant
+from plants.io.file import get_plant
 from tests.carie.affirmation import is_true_affirmation
 
 
