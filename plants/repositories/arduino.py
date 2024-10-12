@@ -24,7 +24,7 @@ class ArduinoPlantRepository(BasePlantRepository):
             self.create(plant)
 
     def get_plant(self, name: str) -> Plant:
-        arduino_plant = _arduino.get_plant(name)
+        arduino_plant = _arduino.retrieve(name)
 
         if not arduino_plant:
             return None
@@ -33,7 +33,7 @@ class ArduinoPlantRepository(BasePlantRepository):
         return plant
 
     def list_plants(self, *args) -> list[Plant]:
-        arduino_plants = _arduino.list_plants()
+        arduino_plants = _arduino.list_()
 
         if not arduino_plants:
             return []
