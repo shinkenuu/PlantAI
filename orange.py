@@ -2,9 +2,9 @@ import logging
 
 from langchain_core.messages import HumanMessage
 
-from config import OPENAI_BASE_URL
+from config import OLLAMA_BASE_URL
 from plantai.llms import (
-    get_openai_llm,
+    get_ollama_llm,
 )
 from plantai.agents import run_carie
 
@@ -14,9 +14,8 @@ logging.basicConfig(level=logging.INFO)
 carie_state = {"messages": [HumanMessage("How is Iduna doing today?")]}
 
 
-llm = get_openai_llm(
-    base_url=OPENAI_BASE_URL,
-    openai_api_key="sk-whatever",
+llm = get_ollama_llm(
+    base_url=OLLAMA_BASE_URL,
     temperature=0,
 )
 
