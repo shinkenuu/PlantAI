@@ -50,24 +50,23 @@ class ArduinoPlantRepository(BasePlantRepository):
         self._cache[plant.name] = plant
         return plant
 
-    def delete(self, name: str) -> Plant:
-        arduino_plant = _arduino.delete(name)
+    # def delete(self, name: str) -> Plant:
+    #     arduino_plant = _arduino.delete(name)
 
-        if not arduino_plant:
-            raise RuntimeError("Failed to delete arduino plant")
+    #     if not arduino_plant:
+    #         raise RuntimeError("Failed to delete arduino plant")
 
-        self._cache.pop(name, None)
-        return arduino_plant
+    #     self._cache.pop(name, None)
+    #     return arduino_plant
 
-    def _update_cache(self, arduino_plant: dict) -> Plant:
-        plant_name = arduino_plant.get("name")
-
-        plant = self._cache[plant_name]
-
-        for key, value in arduino_plant.items():
-            setattr(plant, key, value)
-
-        # TODO verify if this is necessary
-        self._cache[plant_name] = plant
-
+    def _update_cache(self, arduino_plant: _arduino.ArduinoPlant) -> Plant:
+        plant = self._cache[arduino_plant["name"]]
+        merge_plant_with_arduino_plant(plant, arduino_plant)
         return plant
+
+
+def merge_plant_with_arduino_plant(plant: Plant, arduino_plant: _arduino.ArduinoPlant):
+    plant.actual_sensor.soil_humidity = arduino_plant["soil_moisture"]
+    plant.actual_sensor.air_temperature = arduino_plant["temperature"]
+    plant.actual_sensor.air_humidity = arduino_plant["humidity"]
+    plant.actual_sensor.light_level = arduino_plant["light"]
