@@ -1,6 +1,6 @@
 from langchain_core.tools import tool
 
-import plants
+from plants.repositories import get_plant_repository
 
 
 @tool
@@ -10,8 +10,9 @@ def list_plants(*args) -> list[str]:
     Returns:
         A list with available Plant instances.
     """
-    plants_ = plants.list_plants()
-    return [str(plant) for plant in plants_]
+    repository = get_plant_repository()
+    plants = repository.list_plants()
+    return [str(plant) for plant in plants]
 
 
 @tool
@@ -24,7 +25,8 @@ def get_plant(name: str) -> str:
     Returns:
         (Plant) matching `name` or None if there is no match.
     """
-    plant = plants.get_plant(name)
+    repository = get_plant_repository()
+    plant = repository.get_plant(name)
     return str(plant)
 
 
@@ -38,7 +40,8 @@ def is_plant_thirsty(plant_name: str) -> str:
     Returns:
         (str) "true" if plant is thirsty, "false" otherwise.
     """
-    plant = plants.get_plant(plant_name)
+    repository = get_plant_repository()
+    plant = repository.get_plant(plant_name)
     return str(plant.is_thirsty)
 
 
@@ -52,7 +55,8 @@ def is_plant_cold(plant_name: str) -> str:
     Returns:
         (str) "true" if plant is cold, "false" otherwise.
     """
-    plant = plants.get_plant(plant_name)
+    repository = get_plant_repository()
+    plant = repository.get_plant(plant_name)
     return str(plant.is_cold)
 
 
@@ -66,7 +70,8 @@ def is_plant_warm(plant_name: str) -> str:
     Returns:
         (str) "true" if plant is warm, "false" otherwise.
     """
-    plant = plants.get_plant(plant_name)
+    repository = get_plant_repository()
+    plant = repository.get_plant(plant_name)
     return str(plant.is_warm)
 
 
@@ -80,5 +85,6 @@ def is_plant_hungry(plant_name: str) -> str:
     Returns:
         (str) "true" if plant is hungry, "false" otherwise.
     """
-    plant = plants.get_plant(plant_name)
+    repository = get_plant_repository()
+    plant = repository.get_plant(plant_name)
     return str(plant.is_hungry)

@@ -4,28 +4,28 @@ An connected Arduino is required to run these tests. Please refer to Arduino sec
 
 import pytest
 
-from plants import _arduino
+from plants.io import arduino
 
 
 @pytest.mark.arduino
 @pytest.mark.parametrize(
     "operation, operation_args, expected_operation_result",
     [
-        (_arduino.list_, [], []),
-        (_arduino.create, ("Plant 1",), {"name": "Plant 1"}),
-        (_arduino.create, ("Plant 2",), {"name": "Plant 2"}),
+        (arduino.list_, [], []),
+        (arduino.create, ("Plant 1",), {"name": "Plant 1"}),
+        (arduino.create, ("Plant 2",), {"name": "Plant 2"}),
         # retrieving existing plants
-        (_arduino.list_, [], [{"name": "Plant 1"}, {"name": "Plant 2"}]),
+        (arduino.list_, [], [{"name": "Plant 1"}, {"name": "Plant 2"}]),
         # retrieve existing plant
-        (_arduino.retrieve, ("Plant 1",), {"name": "Plant 1"}),
+        (arduino.retrieve, ("Plant 1",), {"name": "Plant 1"}),
         # delete created plant
-        (_arduino.delete, ("Plant 1",), {"id": "_id"}),
+        (arduino.delete, ("Plant 1",), {"id": "_id"}),
         # retrieve deleted plant
-        (_arduino.retrieve, ("Plant 1",), {"error": "plant named Plant 1 not found"}),
+        (arduino.retrieve, ("Plant 1",), {"error": "plant named Plant 1 not found"}),
         # retrieve another existing plant
-        (_arduino.retrieve, ("Plant 2",), {"name": "Plant 2"}),
+        (arduino.retrieve, ("Plant 2",), {"name": "Plant 2"}),
         # list all plants after deletion
-        (_arduino.list_, [], [{"name": "Plant 2"}]),
+        (arduino.list_, [], [{"name": "Plant 2"}]),
     ],
 )
 def test_arduino(operation, operation_args, expected_operation_result):

@@ -29,7 +29,7 @@ def build_graph(llm: BaseChatModel, **kwargs) -> None:
     graph_builder = StateGraph(MessagesState)
 
     call_llm = partial(_call_llm, llm=llm)
-    call_tool = ToolNode(tools=_TOOLS)
+    call_tool = ToolNode(_TOOLS)
 
     graph_builder.add_node("call_llm", call_llm)
     graph_builder.add_node("call_tool", call_tool)

@@ -1,0 +1,54 @@
+[
+    {
+        "id": 1,
+        "name": "Eve",
+        "scientific_name": "Malus domestica",
+        "actual_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 50.0,
+            "soil_ph": 6.0,
+            "light_level": 1000
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 40.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 40.0,
+            "soil_ph": 5.5,
+            "light_level": 1500
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 24.0,
+            "soil_humidity": 70.0,
+            "soil_ph": 7.0,
+            "light_level": 2000
+        }
+    },
+    {
+        "id": 2,
+        "name": "Iduna",
+        "scientific_name": "Malus domestica",
+        "actual_sensor": {
+            "air_humidity": 50.0,
+            "air_temperature": 22.0,
+            "soil_humidity": 50.0,
+            "soil_ph": 6.0,
+            "light_level": 1000
+        },
+        "ideal_min_sensor": {
+            "air_humidity": 40.0,
+            "air_temperature": 18.0,
+            "soil_humidity": 40.0,
+            "soil_ph": 5.5,
+            "light_level": 1500
+        },
+        "ideal_max_sensor": {
+            "air_humidity": 60.0,
+            "air_temperature": 24.0,
+            "soil_humidity": 70.0,
+            "soil_ph": 7.0,
+            "light_level": 2000
+        }
+    }
+]

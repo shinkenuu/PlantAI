@@ -88,13 +88,30 @@ class Plant:
             "ideal_max_sensor": self.ideal_max_sensor.to_dict(),
         }
 
+    @classmethod
+    def from_dict(cls, plant_dict: dict):
+        actual_sensor = Sensor(**plant_dict["actual_sensor"])
+        ideal_min_sensor = Sensor(**plant_dict["ideal_min_sensor"])
+        ideal_max_sensor = Sensor(**plant_dict["ideal_max_sensor"])
+
+        return cls(
+            id=plant_dict["id"],
+            name=plant_dict["name"],
+            scientific_name=plant_dict["scientific_name"],
+            actual_sensor=actual_sensor,
+            ideal_min_sensor=ideal_min_sensor,
+            ideal_max_sensor=ideal_max_sensor,
+        )
+
     @property
     def is_thirsty(self):
         return self.actual_sensor.soil_humidity < self.ideal_min_sensor.soil_humidity
 
     @property
     def is_cold(self):
-        return self.actual_sensor.air_temperature < self.ideal_min_sensor.air_temperature
+        return (
+            self.actual_sensor.air_temperature < self.ideal_min_sensor.air_temperature
+        )
 
     @property
     def is_warm(self, warmness_baseline: float = 0.3):
