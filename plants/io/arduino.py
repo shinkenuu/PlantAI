@@ -8,6 +8,7 @@ See https://forum.arduino.cc/t/python-wont-read-serial-data-the-same-way-that-th
 import json
 import logging
 from time import sleep
+from typing import TypedDict
 
 from serial import Serial
 
@@ -22,7 +23,16 @@ timeout = 5  # Increase empirically when DEBUG tells there is no bytes waiting f
 _serial = None
 
 
-def list_() -> list[dict]:
+class ArduinoPlant(TypedDict):
+    id: str
+    name: str
+    soil_moisture: float
+    temperature: float
+    humidity: float
+    light: float
+
+
+def list_() -> list[ArduinoPlant]:
     logging.info("Listing plants with Arduino")
 
     plants = _communicate(command="?", plant_name="")
@@ -32,7 +42,7 @@ def list_() -> list[dict]:
     return plants
 
 
-def retrieve(name: str) -> dict | None:
+def retrieve(name: str) -> ArduinoPlant | None:
     logging.info(f"Retrieving plant with {name=}")
 
     if not name:
@@ -44,7 +54,7 @@ def retrieve(name: str) -> dict | None:
     return plant
 
 
-def create(name: str) -> dict:
+def create(name: str) -> ArduinoPlant:
     logging.info(f"Creating plant with {name=}")
 
     if not name:
@@ -56,7 +66,7 @@ def create(name: str) -> dict:
     return plant
 
 
-def delete(name: str) -> dict:
+def delete(name: str) -> ArduinoPlant:
     logging.info(f"Deleting plant with {name=}")
 
     if not name:
@@ -68,7 +78,7 @@ def delete(name: str) -> dict:
     return plant
 
 
-def _communicate(command: str, plant_name: str) -> dict | list[dict]:
+def _communicate(command: str, plant_name: str) -> ArduinoPlant | list[ArduinoPlant]:
     message_to_serial = command + plant_name
     _tx(message=message_to_serial)
 
