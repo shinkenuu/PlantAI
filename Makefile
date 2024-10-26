@@ -4,8 +4,8 @@ clean-cache:
 test:
 	pytest -vvv -m "not arduino"
 
-test-all:
-	pytest -vvv
+test-carie:
+	DEEPEVAL_TELEMETRY_OPT_OUT="YES" deepeval test run tests/plantai/agents/test_carie.py -vv
 
 lint:
 	ruff check . --fix
