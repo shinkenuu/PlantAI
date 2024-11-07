@@ -1,80 +1,43 @@
 [
     {
         "id": 1,
-        "name": "Alba",
-        "scientific_name": "Haworthia fasciata",
-        "actual_sensor": {
-            "air_humidity": 40.0,
-            "air_temperature": 22.0,
-            "soil_humidity": 30.0,
-            "soil_ph": 6.5,
-            "light_level": 1000
-        },
-        "ideal_min_sensor": {
-            "air_humidity": 30.0,
-            "air_temperature": 18.0,
-            "soil_humidity": 20.0,
-            "soil_ph": 6.0,
-            "light_level": 500
-        },
-        "ideal_max_sensor": {
-            "air_humidity": 50.0,
-            "air_temperature": 25.0,
-            "soil_humidity": 40.0,
-            "soil_ph": 7.0,
-            "light_level": 2000
-        }
+        "name": "Draco",
+        "scientific_name": "Crassula perforata"
     },
     {
         "id": 2,
-        "name": "Peter",
-        "scientific_name": "Daucus carota",
-        "actual_sensor": {
-            "air_humidity": 60.0,
-            "air_temperature": 18.0,
-            "soil_humidity": 70.0,
-            "soil_ph": 6.8,
-            "light_level": 4000
-        },
-        "ideal_min_sensor": {
-            "air_humidity": 50.0,
-            "air_temperature": 15.0,
-            "soil_humidity": 60.0,
-            "soil_ph": 6.5,
-            "light_level": 2000
-        },
-        "ideal_max_sensor": {
-            "air_humidity": 70.0,
-            "air_temperature": 22.0,
-            "soil_humidity": 80.0,
-            "soil_ph": 7.0,
-            "light_level": 6000
-        }
+        "name": "Lillian",
+        "scientific_name": "Spathiphyllum wallisii"
+    },
+    {
+        "id": 2,
+        "name": "Ivy",
+        "scientific_name": "Hedera helix"
     },
     {
         "id": 3,
         "name": "Violet",
         "scientific_name": "Saintpaulia ionantha",
         "actual_sensor": {
-            "air_humidity": 50.0,
-            "air_temperature": 20.0,
-            "soil_humidity": 80.0,
-            "soil_ph": 6.0,
-            "light_level": 800
+            "air_humidity": 18.93,
+            "air_temperature": 6.12,
+            "soil_humidity": 32.29,
+            "soil_ph": 10.41,
+            "light_level": 1808
         },
         "ideal_min_sensor": {
-            "air_humidity": 60.0,
-            "air_temperature": 18.0,
-            "soil_humidity": 70.0,
-            "soil_ph": 5.5,
-            "light_level": 500
+            "air_humidity": 75.29,
+            "air_temperature": 19.25,
+            "soil_humidity": 68.64,
+            "soil_ph": 10.10,
+            "light_level": 4577
         },
         "ideal_max_sensor": {
-            "air_humidity": 80.0,
-            "air_temperature": 22.0,
-            "soil_humidity": 90.0,
-            "soil_ph": 6.5,
-            "light_level": 1000
+            "air_humidity": 25.45,
+            "air_temperature": 20.99,
+            "soil_humidity": 15.85,
+            "soil_ph": 1.568,
+            "light_level": 6766
         }
     },
     {
@@ -82,25 +45,35 @@
         "name": "Tilla",
         "scientific_name": "Tillandsia cyanea",
         "actual_sensor": {
-            "air_humidity": 60.0,
-            "air_temperature": 25.0,
-            "soil_humidity": 50.0,
-            "soil_ph": 5.5,
-            "light_level": 1500
+            "air_humidity": 42.74,
+            "air_temperature": 4.40,
+            "soil_humidity": 83.65,
+            "soil_ph": 8.10,
+            "light_level": 8581
         },
         "ideal_min_sensor": {
-            "air_humidity": 50.0,
-            "air_temperature": 22.0,
-            "soil_humidity": 40.0,
-            "soil_ph": 5.0,
-            "light_level": 1000
+            "air_humidity": 83.21,
+            "air_temperature": 49.47,
+            "soil_humidity": 63.91,
+            "soil_ph": 12.27,
+            "light_level": 4789
         },
         "ideal_max_sensor": {
-            "air_humidity": 70.0,
-            "air_temperature": 28.0,
-            "soil_humidity": 6,
-            "soil_ph": 6.0,
-            "light_level": 2000
+            "air_humidity": 45.69,
+            "air_temperature": 39.64,
+            "soil_humidity": 32.3,
+            "soil_ph": 4.67,
+            "light_level": 7466
         }
+    },
+    {
+        "id": 5,
+        "name": "Cleo",
+        "scientific_name": "Dieffenbachia Seguine"
+    },
+    {
+        "id": 6,
+        "name": "Poderosa",
+        "scientific_name": "Epipremnum aureum"
     }
 ]

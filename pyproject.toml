@@ -15,6 +15,7 @@ langgraph = "^0.2.34"
 ruff = "^0.6.4"
 pytest = "^8.3.2"
 factory-boy = "^3.3.1"
+opik = "^1.1.1"
 
 [tool.poetry.group.ollama.dependencies]
 langchain-ollama = "^0.2.0"

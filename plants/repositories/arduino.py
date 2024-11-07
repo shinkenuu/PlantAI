@@ -20,7 +20,7 @@ class ArduinoPlantRepository(BasePlantRepository):
         logging.info(f"Read {len(plants_json)} plants in {json_path}")
 
         for plant_json in plants_json:
-            plant = Plant.from_dict(plant_json)
+            plant = Plant(**plant_json)
             self.create(plant)
 
     def get_plant(self, name: str) -> Plant:

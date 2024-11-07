@@ -8,6 +8,9 @@
 .pytest_cache
 .ruff_cache
 
+# Scratch
+.scratchpad/
+
 # IDE
 .vscode/
 
