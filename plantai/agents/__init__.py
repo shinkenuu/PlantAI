@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 from langgraph.graph import Graph
-from opik.integrations.langchain import OpikTracer
 
 
 def stream_agent(
@@ -9,7 +8,7 @@ def stream_agent(
 ):
     config = {
         "configurable": {"thread_id": thread_id or str(uuid4())},
-        "callbacks": [OpikTracer(project_name=agent.name)] if trace else [],
+        # "callbacks": [OpikTracer(project_name=agent.name)] if trace else [],
     }
 
     for event in agent.stream(state, config, stream_mode="values", **kwargs):
@@ -23,7 +22,7 @@ def invoke_agent(
 ):
     config = {
         "configurable": {"thread_id": thread_id or str(uuid4())},
-        "callbacks": [OpikTracer(project_name=agent.name)] if trace else [],
+        # "callbacks": [OpikTracer(project_name=agent.name)] if trace else [],
     }
 
     return agent.invoke(state, config, **kwargs)

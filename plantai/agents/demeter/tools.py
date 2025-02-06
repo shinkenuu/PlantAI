@@ -4,7 +4,7 @@ from langchain_core.tools import tool
 
 from plants.repositories import get_plant_repository
 from plants.schemas import Plant
-from knowledge.care import get_care_guide
+from knowledge.care import get_care_guides
 
 
 @tool
@@ -68,8 +68,8 @@ def search_plant_watering_guide(plant_name: Annotated[str, "Given name of the pl
     """Returns plant's expert watering instructions"""
 
     plant_scientific_name = _get_plant_scientific_name(plant_name)
-    care_guide = get_care_guide(plant_scientific_name)
-    guide = care_guide.get("watering", "")
+    care_guide = get_care_guides(plant_scientific_name)
+    guide = care_guide.get("water", "")
     return guide
 
 
@@ -78,7 +78,7 @@ def search_plant_sunlight_guide(plant_name: Annotated[str, "Given name of the pl
     """Returns plant's expert sunlight instructions"""
 
     plant_scientific_name = _get_plant_scientific_name(plant_name)
-    care_guide = get_care_guide(plant_scientific_name)
+    care_guide = get_care_guides(plant_scientific_name)
     guide = care_guide.get("sunlight", "")
     return guide
 
@@ -88,7 +88,7 @@ def search_plant_pruning_guide(plant_name: Annotated[str, "Given name of the pla
     """Returns plant's expert pruning instructions"""
 
     plant_scientific_name = _get_plant_scientific_name(plant_name)
-    care_guide = get_care_guide(plant_scientific_name)
+    care_guide = get_care_guides(plant_scientific_name)
     guide = care_guide.get("pruning", "")
     return guide
 
