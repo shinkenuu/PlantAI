@@ -4,7 +4,7 @@ from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.prebuilt import ToolNode
 
 from plantai.llms import get_openai_llm
-from plantai.llms.openai import QWEN25
+from plantai.llms.openai import QWEN3
 
 from plantai.agents.demeter.tools import TOOLS
 
@@ -105,7 +105,7 @@ def build_graph(debug: bool = False, **kwargs) -> None:
 
 
 def _call_llm(state: MessagesState) -> dict:
-    llm = get_openai_llm(model=QWEN25, temperature=0).bind_tools(TOOLS)
+    llm = get_openai_llm(model=QWEN3, temperature=0).bind_tools(TOOLS)
 
     messages = [SystemMessage(content=_SYSTEM_MESSAGE)] + state["messages"][-7:]
 
