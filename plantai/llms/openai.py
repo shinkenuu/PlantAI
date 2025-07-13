@@ -1,8 +1,7 @@
 from langchain_openai.chat_models import ChatOpenAI
 
-
-HERMES3 = "./dist/Hermes-3-Llama-3.1-8B-q4f16_1-MLC"
-_DEFAULT_MODEL_NAME = HERMES3
+QWEN3 = "qwen3:32b"
+_DEFAULT_MODEL_NAME = QWEN3
 
 
 def get_llm(model: str = _DEFAULT_MODEL_NAME, **kwargs) -> ChatOpenAI:

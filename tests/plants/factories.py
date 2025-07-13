@@ -10,8 +10,8 @@ class SensorFactory(factory.Factory):
     air_humidity = factory.Faker("pyfloat", min_value=0, max_value=100)
     air_temperature = factory.Faker("pyfloat", min_value=0, max_value=50)
     soil_humidity = factory.Faker("pyfloat", min_value=0, max_value=100)
-    soil_ph = factory.Faker("pyfloat", min_value=1, max_value=8)
-    light_level = factory.Faker("pyfloat", min_value=0, max_value=10_000)
+    soil_ph = factory.Faker("pyfloat", min_value=1, max_value=14)
+    light_level = factory.Faker("pyint", min_value=0, max_value=10_000)
 
 
 class PlantFactory(factory.Factory):

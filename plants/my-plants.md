@@ -1,7 +1,7 @@
 # My Plants
 
 
-## ?
+## Draco
 ### [Crassula perforata](https://www.gardenia.net/plant/crassula-perforata-string-of-buttons) or [Crassula 'Springtime'](https://www.succulentsandsunshine.com/types-of-succulents/crassula-springtime/)
 
 Common names:
@@ -41,7 +41,7 @@ Common names:
 <img src="https://www.thespruce.com/thmb/ZeWCJuwzOfvDbNErXhWhR6uEB2g=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-1197293415-ecb8ddb2173e4c17baab570e37c524e4.jpg" width=320px height=320px>
 
 ---
-## ?
+## Cleo
 ### [Epipremnum aureum](https://www.thespruce.com/marble-queen-pothos-plant-profile-5206131)
 
 Common names:
@@ -49,7 +49,6 @@ Common names:
 - pothos
 
 <img src="https://www.thespruce.com/thmb/DAYKfRmgORWtoDQOpbu-ropH5dU=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/marble-queen-pothos-plant-profile-5206131-hero-19b8dca0cf9e407b87a6f93e50054ed3.jpg" width=320px height=320px>
-
 
 ---
 ## Tilla
@@ -59,7 +58,6 @@ Common names:
 - pink quill
 
 <img src="https://www.guide-to-houseplants.com/images/pink-quill-flowering.jpg" width=320px height=320px>
-
 
 ---
 ## Violet

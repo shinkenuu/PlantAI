@@ -4,7 +4,9 @@ from os import getenv
 REPOSITORY_BACKEND: Literal["file", "arduino"] = getenv("REPOSITORY_BACKEND", "file")
 
 
-ARDUINO_REPOSITORY_JSON_PATH = getenv("ARDUINO_REPOSITORY_JSON_PATH", "./plants/io/arduino.json")
+ARDUINO_REPOSITORY_JSON_PATH = getenv(
+    "ARDUINO_REPOSITORY_JSON_PATH", "./plants/io/arduino.json"
+)
 FILE_REPOSITORY_JSON_PATH = getenv("FILE_REPOSITORY_JSON_PATH", "./plants/io/file.json")
 
 # LLMs
@@ -16,3 +18,8 @@ OLLAMA_BASE_URL = getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
 
 TREFLE_API_KEY = getenv("TREFLE_API_KEY")
 PERUNIAL_API_KEY = getenv("PERUNIAL_API_KEY")
+
+# DATABASE
+DODDER_DATABASE_URI = getenv(
+    "DODDER_DATABASE_URI", "mongodb://root:toor@127.0.0.1:27017?authSource=admin"
+)

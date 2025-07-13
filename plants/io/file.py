@@ -12,7 +12,7 @@ def list_plants(*args) -> list[Plant]:
     with open(FILE_REPOSITORY_JSON_PATH) as file:
         plants_json = json.load(file)
 
-    plants = [Plant.from_dict(plant_json) for plant_json in plants_json]
+    plants = [Plant(**plant_json) for plant_json in plants_json]
 
     logging.info(f"Read {len(plants)} plants in {FILE_REPOSITORY_JSON_PATH}")
     return plants
