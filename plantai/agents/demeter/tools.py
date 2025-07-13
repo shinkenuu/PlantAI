@@ -4,7 +4,7 @@ from langchain_core.tools import tool
 
 from plants.repositories import get_plant_repository
 from plants.schemas import Plant
-from knowledge.care import get_care_guides
+from knowledge import care_guides
 
 
 @tool
@@ -60,39 +60,6 @@ def read_air_temperature_sensor(plant_name: Annotated[str, "Given name of the pl
     return sensor_reading
 
 
-# KNOWLEDGE
-
-
-@tool
-def search_plant_watering_guide(plant_name: Annotated[str, "Given name of the plant you want the watering guide for"]) -> str:
-    """Returns plant's expert watering instructions"""
-
-    plant_scientific_name = _get_plant_scientific_name(plant_name)
-    care_guide = get_care_guides(plant_scientific_name)
-    guide = care_guide.get("water", "")
-    return guide
-
-
-@tool
-def search_plant_sunlight_guide(plant_name: Annotated[str, "Given name of the plant you want the sunlight guide for"]) -> str:
-    """Returns plant's expert sunlight instructions"""
-
-    plant_scientific_name = _get_plant_scientific_name(plant_name)
-    care_guide = get_care_guides(plant_scientific_name)
-    guide = care_guide.get("sunlight", "")
-    return guide
-
-
-@tool
-def search_plant_pruning_guide(plant_name: Annotated[str, "Given name of the plant you want the pruning guide for"]) -> str:
-    """Returns plant's expert pruning instructions"""
-
-    plant_scientific_name = _get_plant_scientific_name(plant_name)
-    care_guide = get_care_guides(plant_scientific_name)
-    guide = care_guide.get("pruning", "")
-    return guide
-
-
 # ---
 
 
@@ -115,7 +82,9 @@ TOOLS = (
     read_soil_humidity_sensor,
     read_air_temperature_sensor,
     # knowledge
-    search_plant_watering_guide,
-    search_plant_sunlight_guide,
-    search_plant_pruning_guide,
+    care_guides.get_watering_guide,
+    care_guides.get_sunlight_guide,
+    care_guides.get_fertilizing_guide,
+    care_guides.get_pruning_guide,
+    care_guides.get_propagation_guide,
 )

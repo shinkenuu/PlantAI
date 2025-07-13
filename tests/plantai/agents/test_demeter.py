@@ -39,8 +39,12 @@ from tests.plantai.agents import get_called_tool_calls, get_called_tools_content
             ],
             [
                 ToolCall(
-                    name="search_plant_sunlight_guide",
+                    name="get_plant_scientific_name",
                     input_parameters={"plant_name": "Lillian"},
+                ),
+                ToolCall(
+                    name="get_sunlight_guide",
+                    input_parameters={"scientific_name": "Spathiphyllum wallisii"},
                 )
             ],
         ),
