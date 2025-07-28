@@ -1,5 +1,5 @@
 """
-An connected Arduino is required to run these tests. Please refer to Arduino section in README.md 
+An connected Arduino is required to run these tests. Please refer to Arduino section in README.md
 """
 
 import pytest

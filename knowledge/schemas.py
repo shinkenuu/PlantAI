@@ -1,40 +1,46 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 # PictureThisAI
 
 
 class PlantWikiKeyFacts(BaseModel):
-    toxicity: str | None
-    lifespan: str | None
-    plant_type: str | None
-    bloom_time: str | None
-    harvest_time: str | None
-    plant_height: str | None
-    spread: str | None
-    leaf_color: str | None
-    flower_size: str | None
-    fruit_color: str | None
-    flower_color: str | None
-    stem_color: str | None
-    dormancy: str | None
-    leaf_type: str | None
-    ideal_temperature: str | None
-    growth_season: str | None
-    growth_rate: str | None
-    water: str | None
-    sunlight: str | None
+    toxicity: str | None = None
+    lifespan: str | None = None
+    plant_type: str | None = None
+    bloom_time: str | None = None
+    harvest_time: str | None = None
+    plant_height: str | None = None
+    spread: str | None = None
+    leaf_color: str | None = None
+    flower_size: str | None = None
+    fruit_color: str | None = None
+    flower_color: str | None = None
+    stem_color: str | None = None
+    dormancy: str | None = None
+    leaf_type: str | None = None
+    ideal_temperature: str | None = None
+    growth_season: str | None = None
+    growth_rate: str | None = None
+    water: str | None = None
+    sunlight: str | None = None
+
+    class Config:
+        extra = "ignore"
 
 
 class PlantWikiCareGuides(BaseModel):
-    water: str | None
-    fertilize: str | None
-    pruning: str | None
-    propagation: str | None
-    repotting: str | None
+    water: str | None = None
+    fertilize: str | None = None
+    pruning: str | None = None
+    propagation: str | None = None
+    repotting: str | None = None
+
+    class Config:
+        extra = "ignore"
 
 
 class PictureThisAIPlantWiki(BaseModel):
-    id: dict[str, str] = Field(alias="_id")
+    # id: str = Field(alias="_id")
     url: str
     scrapped_at: str
     scientific_name: str
@@ -45,12 +51,15 @@ class PictureThisAIPlantWiki(BaseModel):
     care_guides: PlantWikiCareGuides
     identification_points: list[str]
 
+    class Config:
+        extra = "ignore"
+
 
 # Perenual
 
 
 class PerenualSpeciesGuide(BaseModel):
-    id: str = Field(alias="_id")
+    # id: str = Field(alias="_id")
     url: str
     scrapped_at: str
     common_name: str
@@ -59,3 +68,6 @@ class PerenualSpeciesGuide(BaseModel):
     watering: str
     sunlight: str
     pruning: str
+
+    class Config:
+        extra = "ignore"

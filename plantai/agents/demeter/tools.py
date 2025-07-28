@@ -2,9 +2,9 @@ from typing import Annotated
 
 from langchain_core.tools import tool
 
+from knowledge import care_guides
 from plants.repositories import get_plant_repository
 from plants.schemas import Plant
-from knowledge import care_guides
 
 
 @tool
@@ -17,7 +17,11 @@ def get_all_my_plants(*args) -> list[str]:
 
 
 @tool
-def get_plant_scientific_name(plant_name: Annotated[str, "Given name of the plant you want the scientific name of"]) -> str:
+def get_plant_scientific_name(
+    plant_name: Annotated[
+        str, "Given name of the plant you want the scientific name of"
+    ],
+) -> str:
     """Returns plant's scientific name."""
 
     return _get_plant_scientific_name(plant_name=plant_name)
@@ -27,7 +31,11 @@ def get_plant_scientific_name(plant_name: Annotated[str, "Given name of the plan
 
 
 @tool
-def read_soil_humidity_sensor(plant_name: Annotated[str, "Given name of the plant you want to read the soil humidity"]) -> str:
+def read_soil_humidity_sensor(
+    plant_name: Annotated[
+        str, "Given name of the plant you want to read the soil humidity"
+    ],
+) -> str:
     """Returns plant's soil humidity sensor reading."""
 
     plant = _get_plant(plant_name)
@@ -44,7 +52,11 @@ def read_soil_humidity_sensor(plant_name: Annotated[str, "Given name of the plan
 
 
 @tool
-def read_air_temperature_sensor(plant_name: Annotated[str, "Given name of the plant you want to read the temperature"]) -> str:
+def read_air_temperature_sensor(
+    plant_name: Annotated[
+        str, "Given name of the plant you want to read the temperature"
+    ],
+) -> str:
     """Returns plant's air temperature sensor reading."""
 
     plant = _get_plant(plant_name)
@@ -77,7 +89,7 @@ def _get_plant_scientific_name(plant_name: str) -> str:
 
 TOOLS = (
     get_all_my_plants,
-    # get_plant_scientific_name,
+    get_plant_scientific_name,
     # sensors
     read_soil_humidity_sensor,
     read_air_temperature_sensor,

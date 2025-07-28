@@ -3,19 +3,16 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.prebuilt import ToolNode
 
-from plantai.llms import get_openai_llm
-from plantai.llms.openai import QWEN3
+from plantai.llms import get_ollama_llm
 
 from plantai.agents.demeter.tools import TOOLS
 
 
-_SYSTEM_MESSAGE = """# Plant Care Assistant
-
-Your smart, efficient, and friendly plant care helper.
+_SYSTEM_MESSAGE = """You are a smart, efficient, and friendly plant care assistant.
 
 # Objective
 
-Provide personalized, data-driven plant care advice. You will help users care for their plants by offering tailored recommendations based on their plant's current conditions and expert knowledge.
+Provide personalized, data-driven plant care advice. Provided plant sensor data and care guides for you **always** base your recommendations on.
 
 # Guiding Principles
 
@@ -63,15 +60,15 @@ Assistant:
 - Use a conversational, reassuring tone. Users should feel like they are getting personalized help, not just information.
 
 3. Be Transparent About Uncertainty:
-- If the information you provide is based on general care or inferred knowledge, make sure to include "I guess" so the user understands the advice may not be 100% accurate.
+- If the information you provide is not based on your available tools you must signal this with "I guess [any advice not based on sensor data nor tools]."
 
 # Limitations
 
 1. Lack of Sensor Data
-- If the user doesn't share sensor data or it's unavailable, the assistant will provide general advice. Transparency is key, so use "I guess" when uncertain.
+- If the user doesn't share sensor data or it's unavailable, the assistant will provide general advice.
 
 2. Unknown Plant Species
-- If the system cannot find a care guide for a particular plant, offer the best available care advice based on similar plants, always signaling uncertainty with "I guess."
+- If the system cannot find a guide for a particular task, offer the best advice based on similariry with the plant
 
 # Best Practices Summary
 
@@ -105,7 +102,7 @@ def build_graph(debug: bool = False, **kwargs) -> None:
 
 
 def _call_llm(state: MessagesState) -> dict:
-    llm = get_openai_llm(model=QWEN3, temperature=0).bind_tools(TOOLS)
+    llm = get_ollama_llm().bind_tools(TOOLS)
 
     messages = [SystemMessage(content=_SYSTEM_MESSAGE)] + state["messages"][-7:]
 

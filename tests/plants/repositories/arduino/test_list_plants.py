@@ -25,9 +25,7 @@ def test_calls_arduino_io_list_(arduino_io_mock, arduino_plant_repository):
 def test_updates_cache(arduino_io_mock, arduino_plant_repository):
     # ARRANGE
     plants = PlantFactory.build_batch(1)
-    arduino_plants = [
-        ArduinoPlantFactory(name=plant.name) for plant in plants
-    ]
+    arduino_plants = [ArduinoPlantFactory(name=plant.name) for plant in plants]
 
     arduino_plant_repository._cache = {plant.name: plant for plant in plants}
     arduino_io_mock.list_.return_value = arduino_plants
@@ -40,7 +38,11 @@ def test_updates_cache(arduino_io_mock, arduino_plant_repository):
         cached_plant = arduino_plant_repository._cache[arduino_plant["name"]]
 
         assert cached_plant.name == arduino_plant["name"]
-        assert cached_plant.actual_sensor.soil_humidity == arduino_plant["soil_moisture"]
-        assert cached_plant.actual_sensor.air_temperature == arduino_plant["temperature"]
+        assert (
+            cached_plant.actual_sensor.soil_humidity == arduino_plant["soil_moisture"]
+        )
+        assert (
+            cached_plant.actual_sensor.air_temperature == arduino_plant["temperature"]
+        )
         assert cached_plant.actual_sensor.air_humidity == arduino_plant["humidity"]
         assert cached_plant.actual_sensor.light_level == arduino_plant["light"]

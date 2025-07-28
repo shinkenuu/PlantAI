@@ -7,7 +7,9 @@ REPOSITORY_BACKEND: Literal["file", "arduino"] = getenv("REPOSITORY_BACKEND", "f
 ARDUINO_REPOSITORY_JSON_PATH = getenv(
     "ARDUINO_REPOSITORY_JSON_PATH", "./plants/io/arduino.json"
 )
-FILE_REPOSITORY_JSON_PATH = getenv("FILE_REPOSITORY_JSON_PATH", "./plants/io/file.json")
+FILE_REPOSITORY_JSON_PATH = getenv(
+    "FILE_REPOSITORY_JSON_PATH", "./plants/io/local_plants.json"
+)
 
 # LLMs
 

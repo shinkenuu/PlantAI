@@ -1,0 +1,79 @@
+[
+    {
+        "id": 1,
+        "name": "Draco",
+        "scientific_name": "Crassula perforata",
+        "sensor": {
+            "air_humidity": 62.31,
+            "air_temperature": 21.95,
+            "soil_humidity": 54.11,
+            "soil_ph": 6.38,
+            "light_level": 3411
+        }
+    },
+    {
+        "id": 2,
+        "name": "Lillian",
+        "scientific_name": "Spathiphyllum wallisii",
+        "sensor": {
+            "air_humidity": 67.23,
+            "air_temperature": 19.82,
+            "soil_humidity": 63.41,
+            "soil_ph": 7.14,
+            "light_level": 2301
+        }
+    },
+    {
+        "id": 2,
+        "name": "Ivy",
+        "scientific_name": "Hedera helix",
+        "sensor": {
+            "air_humidity": 71.03,
+            "air_temperature": 18.19,
+            "soil_humidity": 75.19,
+            "soil_ph": 7.49,
+            "light_level": 1921
+        }
+    },
+    {
+        "id": 3,
+        "name": "Violet",
+        "scientific_name": "Saintpaulia ionantha",
+        "sensor": {
+            "air_humidity": 18.93,
+            "air_temperature": 6.12,
+            "soil_humidity": 32.29,
+            "soil_ph": 10.41,
+            "light_level": 1808
+        }
+    },
+    {
+        "id": 4,
+        "name": "Tilla",
+        "scientific_name": "Tillandsia cyanea",
+        "sensor": {
+            "air_humidity": 42.74,
+            "air_temperature": 4.40,
+            "soil_humidity": 83.65,
+            "soil_ph": 8.10,
+            "light_level": 8581
+        }
+    },
+    {
+        "id": 5,
+        "name": "Cleo",
+        "scientific_name": "Dieffenbachia Seguine"
+    },
+    {
+        "id": 6,
+        "name": "Poderosa",
+        "scientific_name": "Epipremnum aureum",
+        "sensor": {
+            "air_humidity": 64.58,
+            "air_temperature": 22.11,
+            "soil_humidity": 59.83,
+            "soil_ph": 7.03,
+            "light_level": 2791
+        }
+    }
+]

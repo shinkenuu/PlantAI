@@ -3,8 +3,13 @@ from deepeval.metrics import FaithfulnessMetric, ToolCorrectnessMetric
 from deepeval.test_case import LLMTestCase, ToolCall, ToolCallParams
 import pytest
 
+from knowledge.care_guides import get_watering_guide, get_sunlight_guide
 from plantai.agents.demeter import talk as talk_to_demeter
-from plants.io.file import get_plant
+from plantai.agents.demeter.tools import (
+    get_plant_scientific_name,
+    read_soil_humidity_sensor,
+    read_air_temperature_sensor,
+)
 from tests.plantai.agents import get_called_tool_calls, get_called_tools_contents
 
 
@@ -13,7 +18,10 @@ from tests.plantai.agents import get_called_tool_calls, get_called_tools_content
     [
         (
             "Is Violet warm?",
-            [f"Violet is {'' if get_plant('Violet').is_warm else 'not'} warm"],
+            [
+                get_plant_scientific_name("Lillian"),
+                get_watering_guide("Spathiphyllum wallisii"),
+            ],
             [
                 ToolCall(
                     name="read_air_temperature_sensor",
@@ -22,8 +30,25 @@ from tests.plantai.agents import get_called_tool_calls, get_called_tools_content
             ],
         ),
         (
+            "How often should I water Lillian?",
+            [
+                get_plant_scientific_name("Lillian"),
+                get_watering_guide("Spathiphyllum wallisii"),
+            ],
+            [
+                ToolCall(
+                    name="get_plant_scientific_name",
+                    input_parameters={"plant_name": "Lillian"},
+                ),
+                ToolCall(
+                    name="care_guides.get_watering_guide",
+                    input_parameters={"scientific_name": "Spathiphyllum wallisii"},
+                ),
+            ],
+        ),
+        (
             "Should I water Tilla?",
-            [f"Peter is {'' if get_plant('Tilla').is_thirsty else 'not'} thirsty"],
+            ["Tilla is not thirsty"],
             [
                 ToolCall(
                     name="read_soil_humidity_sensor",
@@ -35,7 +60,7 @@ from tests.plantai.agents import get_called_tool_calls, get_called_tools_content
             "What is the best place for Lillian to be?",
             [
                 "Lillian's scientific name is Epipremnum aureum",
-                "Somewhere with indirect yet abundant sunlight",
+                "Epipremnum aureum thrive with indirect yet abundant sunlight",
             ],
             [
                 ToolCall(
@@ -45,7 +70,91 @@ from tests.plantai.agents import get_called_tool_calls, get_called_tools_content
                 ToolCall(
                     name="get_sunlight_guide",
                     input_parameters={"scientific_name": "Spathiphyllum wallisii"},
-                )
+                ),
+            ],
+        ),
+        (
+            "Ivy's soil moisture feels high. Did I water it too much?",
+            [
+                get_plant_scientific_name("Ivy"),
+                read_soil_humidity_sensor("Ivy"),
+                get_watering_guide("Hedera helix"),
+            ],
+            [
+                ToolCall(
+                    name="get_plant_scientific_name",
+                    input_parameters={"plant_name": "Ivy"},
+                ),
+                ToolCall(
+                    name="read_soil_humidity_sensor",
+                    input_parameters={"plant_name": "Ivy"},
+                ),
+                ToolCall(
+                    name="care_guides.get_watering_guide",
+                    input_parameters={"scientific_name": "Hedera helix"},
+                ),
+            ],
+        ),
+        (
+            "Whats up with Cleo?",
+            [
+                read_soil_humidity_sensor("Cleo"),
+                read_air_temperature_sensor("Cleo"),
+            ],
+            [
+                ToolCall(
+                    name="read_soil_humidity_sensor",
+                    input_parameters={"plant_name": "Cleo"},
+                ),
+                ToolCall(
+                    name="read_air_temperature_sensor",
+                    input_parameters={"plant_name": "Cleo"},
+                ),
+            ],
+        ),
+        (
+            "Is Tilla thirsty?",
+            [
+                read_soil_humidity_sensor("Tilla"),
+                get_plant_scientific_name("Tilla"),
+                get_watering_guide("Tillandsia cyanea"),
+            ],
+            [
+                ToolCall(
+                    name="read_soil_humidity_sensor",
+                    input_parameters={"plant_name": "Tilla"},
+                ),
+                ToolCall(
+                    name="get_plant_scientific_name",
+                    input_parameters={"plant_name": "Tilla"},
+                ),
+                ToolCall(
+                    name="get_watering_guide",
+                    input_parameters={"scientific_name": "Tillandsia cyanea"},
+                ),
+            ],
+        ),
+        (
+            "Describe the ideal place for Draco",
+            [
+                get_plant_scientific_name("Draco"),
+                # Asking for more info i.e plant is a seedling, are there any signs of disease, etc.
+                get_watering_guide("Crassula perforata"),
+                get_sunlight_guide("Crassula perforata"),
+            ],
+            [
+                ToolCall(
+                    name="get_plant_scientific_name",
+                    input_parameters={"plant_name": "Draco"},
+                ),
+                ToolCall(
+                    name="get_watering_guide",
+                    input_parameters={"scientific_name": "Crassula perforata"},
+                ),
+                ToolCall(
+                    name="get_sunlight_guide",
+                    input_parameters={"scientific_name": "Crassula perforata"},
+                ),
             ],
         ),
     ],

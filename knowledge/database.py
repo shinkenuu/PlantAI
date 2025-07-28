@@ -31,7 +31,9 @@ class DodderDatabase:
 
         if plant_wiki_document:
             logging.info("Found PictureThisAI plant wiki for '%s'", scientific_name)
-            return PictureThisAIPlantWiki.model_validate(plant_wiki_document)
+            return PictureThisAIPlantWiki.model_validate(
+                plant_wiki_document, by_alias=True
+            )
 
         logging.warning("No PictureThisAI plant wiki found for '%s'", scientific_name)
         return None
