@@ -61,12 +61,12 @@
     },
     {
         "id": 5,
-        "name": "Cleo",
-        "scientific_name": "Dieffenbachia Seguine"
+        "name": "Poderosa",
+        "scientific_name": "Dieffenbachia amoena"
     },
     {
         "id": 6,
-        "name": "Poderosa",
+        "name": "Cleo",
         "scientific_name": "Epipremnum aureum",
         "sensor": {
             "air_humidity": 64.58,

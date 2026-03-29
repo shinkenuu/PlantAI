@@ -11,6 +11,7 @@ pydantic = "^2.9.0"
 pyserial = "^3.5"
 langgraph = "^0.2.34"
 pymongo = "^4.11"
+opik = "^1.8.11"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.4"

@@ -3,9 +3,8 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, MessagesState, START, END
 from langgraph.prebuilt import ToolNode
 
-from plantai.llms import get_ollama_llm
-
 from plantai.agents.demeter.tools import TOOLS
+from plantai.llms import get_ollama_llm
 
 
 _SYSTEM_MESSAGE = """You are a smart, efficient, and friendly plant care assistant.
@@ -101,6 +100,7 @@ def build_graph(debug: bool = False, **kwargs) -> None:
     return graph
 
 
+# @track
 def _call_llm(state: MessagesState) -> dict:
     llm = get_ollama_llm().bind_tools(TOOLS)
 
