@@ -1,27 +1,36 @@
 from typing import Literal
-from os import getenv
 
-REPOSITORY_BACKEND: Literal["file", "arduino"] = getenv("REPOSITORY_BACKEND", "file")
+from pydantic import Field, MongoDsn
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-ARDUINO_REPOSITORY_JSON_PATH = getenv(
-    "ARDUINO_REPOSITORY_JSON_PATH", "./plants/io/arduino.json"
-)
-FILE_REPOSITORY_JSON_PATH = getenv(
-    "FILE_REPOSITORY_JSON_PATH", "./plants/io/local_plants.json"
-)
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore",
+    )
 
-# LLMs
+    # Plant I/O
+    repository_backend: Literal["file", "arduino"] = "file"
+    arduino_repository_json_path: str = "./plants/io/arduino.json"
+    file_repository_json_path: str = "./plants/io/local_plants.json"
 
-OPENAI_BASE_URL = getenv("OPENAI_BASE_URL", "http://127.0.0.1:8080/v1")
-OLLAMA_BASE_URL = getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+    # LLM endpoints
+    openai_base_url: str = "http://127.0.0.1:8080/v1"
+    ollama_base_url: str = "http://127.0.0.1:11434"
 
-# API KEYS
+    # External API keys (None = not configured)
+    trefle_api_key: str | None = None
+    perenual_api_key: str | None = None  # fixed typo: was PERUNIAL
 
-TREFLE_API_KEY = getenv("TREFLE_API_KEY")
-PERUNIAL_API_KEY = getenv("PERUNIAL_API_KEY")
+    # Database
+    dodder_database_uri: MongoDsn = Field(
+        default="mongodb://root:toor@127.0.0.1:27017/?authSource=admin",
+        description="MongoDB connection URI. Override via DODDER_DATABASE_URI env var.",
+    )
 
-# DATABASE
-DODDER_DATABASE_URI = getenv(
-    "DODDER_DATABASE_URI", "mongodb://root:toor@127.0.0.1:27017?authSource=admin"
-)
+
+# Module-level singleton — import this everywhere instead of the bare constants.
+settings = Settings()

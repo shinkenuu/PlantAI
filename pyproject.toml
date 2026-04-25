@@ -4,16 +4,17 @@ version = "0.1.0"
 description = "Plants meet AI for self-caring, self-knowledge and improved human interfacing"
 authors = [{name = "Shinkenuu", email = "shinkenuu@gmail.com"}]
 readme = "README.md"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.12"
 
 dependencies = [
     "pydantic>=2.9.0,<3.0.0",
+    "pydantic-settings>=2.5.0,<3.0.0",
     "pyserial>=3.5,<4.0",
     "langgraph>=0.2.34,<0.3.0",
     "pymongo>=4.11,<5.0",
-    "opik>=1.8.11,<2.0",
 ]
 
+# Optional runtime extras — install with: uv sync --extra ollama
 [project.optional-dependencies]
 ollama = [
     "langchain-ollama>=0.2.0,<0.3.0",
@@ -21,6 +22,13 @@ ollama = [
 openai = [
     "langchain-openai>=0.2.2,<0.3.0",
 ]
+tracing = [
+    "opik>=1.8.11,<2.0",
+]
+
+[project.scripts]
+# Run the agent from the command line: uv run plantai
+plantai = "prototype:main"
 
 [tool.pytest.ini_options]
 markers = [
@@ -32,15 +40,12 @@ markers = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+# Dev-only tools (not shipped to users)
 [dependency-groups]
 dev = [
     "pytest>=8.3.2,<9.0.0",
     "factory-boy>=3.3.1,<4.0.0",
     "deepeval>=2.3.2,<3.0.0",
-]
-ollama = [
-    "langchain-ollama>=0.2.0,<0.3.0",
-]
-openai = [
-    "langchain-openai>=0.2.2,<0.3.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
 ]

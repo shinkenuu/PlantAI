@@ -1,0 +1,16 @@
+services:
+  mongo:
+    image: mongo:5.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+    volumes:
+      - dodder-mongo-volume:/data/db
+
+volumes:
+  dodder-mongo-volume:
+    external: true
+    name: dodder_dodder-mongo-volume
