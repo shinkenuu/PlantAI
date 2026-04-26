@@ -12,14 +12,6 @@ PlantAI enables plants to meet AI for self-caring, self-knowledge, and improved 
 - Run scripts in venv: `uv run <command>`
 - Clean cache: `make clean-cache`
 
-### Environment Variables
-
-Set in `.env`:
-- `REPOSITORY_BACKEND`: "file" or "arduino" (default: "file")
-- `OPENAI_BASE_URL`: LLM endpoint (default: `http://127.0.0.1:8080/v1`)
-- `OLLAMA_BASE_URL`: Ollama endpoint (default: `http://127.0.0.1:11434`)
-- `DODDER_DATABASE_URI`: MongoDB connection string
-- `TREFLE_API_KEY`, `PERUNIAL_API_KEY`: External API keys
 
 ### Entrypoints
 
