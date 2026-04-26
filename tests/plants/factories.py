@@ -13,6 +13,10 @@ class SensorFactory(factory.Factory):
     soil_ph = factory.Faker("pyfloat", min_value=1, max_value=14)
     light_level = factory.Faker("pyint", min_value=0, max_value=10_000)
 
+    soil_pin = None
+    dht_pin = None
+    light_pin = None
+
 
 class PlantFactory(factory.Factory):
     class Meta:

@@ -1,7 +1,7 @@
 import json
 import logging
 
-from config import ARDUINO_REPOSITORY_JSON_PATH
+from config import settings
 from plants.io import arduino as _arduino
 from plants.repositories._base import BasePlantRepository
 from plants.schemas import Plant
@@ -11,7 +11,9 @@ class ArduinoPlantRepository(BasePlantRepository):
     def __init__(self) -> None:
         self._cache = {}
 
-    def restore_plants_from_json(self, json_path: str = ARDUINO_REPOSITORY_JSON_PATH):
+    def restore_plants_from_json(
+        self, json_path: str = settings.arduino_repository_json_path
+    ):
         logging.info(f"Reading plants in {json_path}")
 
         with open(json_path) as file:
@@ -42,7 +44,16 @@ class ArduinoPlantRepository(BasePlantRepository):
         return plants
 
     def create(self, plant: Plant) -> Plant:
-        arduino_plant = _arduino.create(plant.name)
+        sensor_pins = None
+
+        if plant.sensor:
+            sensor_pins = {
+                "soil": plant.sensor.soil_pin,
+                "dht": plant.sensor.dht_pin,
+                "light": plant.sensor.light_pin,
+            }
+
+        arduino_plant = _arduino.create(plant.name, pins=sensor_pins)
 
         if not arduino_plant:
             raise RuntimeError("Failed to create arduino plant")
@@ -50,14 +61,14 @@ class ArduinoPlantRepository(BasePlantRepository):
         self._cache[plant.name] = plant
         return plant
 
-    # def delete(self, name: str) -> Plant:
-    #     arduino_plant = _arduino.delete(name)
+    def delete(self, name: str) -> Plant:
+        arduino_plant = _arduino.delete(name)
 
-    #     if not arduino_plant:
-    #         raise RuntimeError("Failed to delete arduino plant")
+        if not arduino_plant:
+            raise RuntimeError("Failed to delete arduino plant")
 
-    #     self._cache.pop(name, None)
-    #     return arduino_plant
+        self._cache.pop(name, None)
+        return arduino_plant
 
     def _update_cache(self, arduino_plant: _arduino.ArduinoPlant) -> Plant:
         plant = self._cache[arduino_plant["name"]]

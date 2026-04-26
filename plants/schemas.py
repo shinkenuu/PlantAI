@@ -1,16 +1,53 @@
 from pydantic import BaseModel, Field
 
 
+MAX_ARDUINO_PIN = 69
+
+
 class Sensor(BaseModel):
     air_humidity: float = Field(
-        description="0% (completely dry) to 100% (completely saturated with moisture)"
+        description="0% (completely dry) to 100% (completely saturated with moisture)",
     )
-    air_temperature: float = Field(description="measured in Celsius")
+    air_temperature: float = Field(
+        description="measured in Celsius",
+    )
     soil_humidity: float = Field(
-        description="0% (completely dry) to 100% (saturated soil)"
+        description="0% (completely dry) to 100% (saturated soil)",
     )
-    soil_ph: float = Field(description="0 (highly acidic) to 14 (highly alkaline)")
-    light_level: int = Field(description="measured in lux")
+    soil_ph: float = Field(
+        description="0 (highly acidic) to 14 (highly alkaline)",
+    )
+    light_level: int = Field(
+        description="measured in lux",
+    )
+
+    soil_pin: int | None = Field(
+        default=None,
+        description="Arduino analog pin for soil moisture",
+        gte=0,
+        lte=MAX_ARDUINO_PIN,
+    )
+    dht_pin: int | None = Field(
+        default=None,
+        description="Arduino digital pin for DHT sensor",
+        gte=0,
+        lte=MAX_ARDUINO_PIN,
+    )
+    light_pin: int | None = Field(
+        default=None,
+        description="Arduino analog pin for light sensor",
+        gte=0,
+        lte=MAX_ARDUINO_PIN,
+    )
+
+    def dump_pins(self) -> dict[str, int]:
+        pins = {
+            "dht": self.dht_pin,
+            "soil": self.soil_pin,
+            "light": self.light_pin,
+        }
+
+        return pins
 
 
 class Plant(BaseModel):

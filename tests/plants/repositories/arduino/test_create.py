@@ -2,19 +2,25 @@ from unittest import mock
 
 import pytest
 
-from tests.plants.factories import PlantFactory
+from tests.plants.factories import PlantFactory, SensorFactory
 
 
 @mock.patch("plants.repositories.arduino._arduino")
 def test_calls_arduino_io_create(arduino_io_mock, arduino_plant_repository):
     # ARRANGE
-    plant_1 = PlantFactory(name="plant_1")
+    plant_1_sensor = SensorFactory(soil_pin=11, dht_pin=12, light_pin=13)
+    plant_1 = PlantFactory(name="plant_1", sensor=plant_1_sensor)
 
     # ACT
     arduino_plant_repository.create(plant_1)
 
     # ASSERT
-    arduino_io_mock.create.assert_called_once_with(plant_1.name)
+    expected_pins = {
+        "soil": plant_1_sensor.soil_pin,
+        "dht": plant_1_sensor.dht_pin,
+        "light": plant_1_sensor.light_pin,
+    }
+    arduino_io_mock.create.assert_called_once_with(plant_1.name, pins=expected_pins)
 
 
 @mock.patch("plants.repositories.arduino._arduino")

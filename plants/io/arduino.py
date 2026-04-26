@@ -5,6 +5,7 @@ Due to the fact that a mere instantiation of Serial
 See https://forum.arduino.cc/t/python-wont-read-serial-data-the-same-way-that-the-arduino-serial-monitor-does/502633
 """
 
+from enum import StrEnum
 import json
 import logging
 from time import sleep
@@ -16,9 +17,9 @@ from serial import Serial
 RESET_DELAY = 1
 
 # Change these according to your Arduino setup
-port = "/dev/ttyACM0"
-baud_rate = 115200
-timeout = 5  # Increase empirically when DEBUG tells there is no bytes waiting for either Tx and Rx
+PORT = "/dev/ttyACM0"
+BAUD_RATE = 115200
+TIMEOUT = 5  # Increase empirically when DEBUG tells there is no bytes waiting for either Tx and Rx
 
 _serial = None
 
@@ -32,10 +33,17 @@ class ArduinoPlant(TypedDict):
     light: float
 
 
+class Command(StrEnum):
+    LIST = "?"
+    RETRIEVE = "="
+    CREATE = "+"
+    DELETE = "-"
+
+
 def list_() -> list[ArduinoPlant]:
     logging.info("Listing plants with Arduino")
 
-    plants = _communicate(command="?", plant_name="")
+    plants = _communicate(command=Command.LIST, plant_name="")
     plants = plants.get("plants", [])
 
     logging.debug(f"Listed {len(plants)} plants with Arduino")
@@ -48,19 +56,19 @@ def retrieve(name: str) -> ArduinoPlant | None:
     if not name:
         raise ValueError("No plant name provided")
 
-    plant = _communicate(command="=", plant_name=name)
+    plant = _communicate(command=Command.RETRIEVE, plant_name=name)
 
     logging.debug(f"Retrieved plant {plant}")
     return plant
 
 
-def create(name: str) -> ArduinoPlant:
-    logging.info(f"Creating plant with {name=}")
+def create(name: str, pins: dict[str, int] | None = None) -> ArduinoPlant:
+    logging.info(f"Creating plant with {name=} and {pins=}")
 
     if not name:
         raise ValueError("No plant name provided")
 
-    plant = _communicate(command="+", plant_name=name)
+    plant = _communicate(command=Command.CREATE, plant_name=name, kwargs=pins)
 
     logging.debug(f"Created plant {plant}")
     return plant
@@ -72,14 +80,24 @@ def delete(name: str) -> ArduinoPlant:
     if not name:
         raise ValueError("No plant name provided")
 
-    plant = _communicate(command="-", plant_name=name)
+    plant = _communicate(command=Command.DELETE, plant_name=name)
 
     logging.debug(f"Deleted plant {plant}")
     return plant
 
 
-def _communicate(command: str, plant_name: str) -> ArduinoPlant | list[ArduinoPlant]:
-    message_to_serial = command + plant_name
+def _communicate(
+    command: str, plant_name: str, kwargs: dict | None = None
+) -> ArduinoPlant | list[ArduinoPlant]:
+    message_to_serial = command
+
+    if kwargs:
+        payload = {"name": plant_name, **kwargs}
+        message_to_serial += json.dumps(payload)
+
+    else:
+        message_to_serial += plant_name
+
     _tx(message=message_to_serial)
 
     message_from_serial = _rx()
@@ -119,9 +137,9 @@ def _rx() -> str:
 
 
 def _ensure_connection(
-    port: str = port,
-    baud_rate: int = baud_rate,
-    timeout: float = timeout,
+    port: str = PORT,
+    baud_rate: int = BAUD_RATE,
+    timeout: float = TIMEOUT,
 ):
     global _serial
 
