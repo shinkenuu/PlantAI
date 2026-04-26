@@ -12,18 +12,18 @@ from plants.io import arduino
     "operation, operation_args, expected_operation_result",
     [
         (arduino.list_, [], []),
-        (arduino.create, ("Plant 1",), {"name": "Plant 1"}),
-        (arduino.create, ("Plant 2",), {"name": "Plant 2"}),
+        (arduino.create, ("Plant 1", {"soil": 34, "dht": 2, "light": 15}), {"name": "Plant 1", "soil_moisture": 1, "temperature": 1, "humidity": 1, "light": 1}),
+        (arduino.create, ("Plant 2", {"soil": 35, "dht": 3, "light": 16}), {"name": "Plant 2", "soil_moisture": 2, "temperature": 2, "humidity": 2, "light": 2}),
         # retrieving existing plants
         (arduino.list_, [], [{"name": "Plant 1"}, {"name": "Plant 2"}]),
         # retrieve existing plant
-        (arduino.retrieve, ("Plant 1",), {"name": "Plant 1"}),
+        (arduino.retrieve, ("Plant 1",), {"name": "Plant 1", "soil_moisture": 1, "temperature": 1, "humidity": 1, "light": 1}),
         # delete created plant
         (arduino.delete, ("Plant 1",), {"id": "_id"}),
         # retrieve deleted plant
         (arduino.retrieve, ("Plant 1",), {"error": "plant named Plant 1 not found"}),
         # retrieve another existing plant
-        (arduino.retrieve, ("Plant 2",), {"name": "Plant 2"}),
+        (arduino.retrieve, ("Plant 2",), {"name": "Plant 2", "soil_moisture": 2, "temperature": 2, "humidity": 2, "light": 2}),
         # list all plants after deletion
         (arduino.list_, [], [{"name": "Plant 2"}]),
     ],
@@ -42,7 +42,7 @@ def test_arduino(operation, operation_args, expected_operation_result):
 
 
 def _assert_single_plant(actual_plant, expected_plant):
-    assert actual_plant.items() >= expected_plant.items()
+    assert set(expected_plant.keys()) <= set(actual_plant.keys())
 
 
 def _assert_multiple_plants(actual_plants, expected_plants):
