@@ -1,7 +1,7 @@
 import json
 import logging
+from pathlib import Path
 
-from config import settings
 from plants.io import arduino as _arduino
 from plants.repositories._base import BasePlantRepository
 from plants.schemas import Plant
@@ -9,23 +9,24 @@ from plants.schemas import Plant
 
 class ArduinoPlantRepository(BasePlantRepository):
     def __init__(self) -> None:
-        self._cache = {}
+        self._cache: dict[str, Plant] = {}
 
-    def restore_plants_from_json(
-        self, json_path: str = settings.arduino_repository_json_path
-    ):
-        logging.info(f"Reading plants in {json_path}")
+    def setup_plant_pins(self, pins_path: Path):
+        logging.info(f"Reading plant's pins in {pins_path}")
 
-        with open(json_path) as file:
-            plants_json = json.load(file)
+        with open(pins_path) as file:
+            pins = json.load(file)
 
-        logging.info(f"Read {len(plants_json)} plants in {json_path}")
+        logging.info(f"Read {len(pins)} plants in {pins_path}")
 
-        for plant_json in plants_json:
+        for plant_json in pins:
             plant = Plant(**plant_json)
             self.create(plant)
 
-    def get_plant(self, name: str) -> Plant:
+    def get_plant(self, name: str, avoid_cache: bool = False) -> Plant:
+        if not avoid_cache and name in self._cache:
+            return self._cache[name]
+
         arduino_plant = _arduino.retrieve(name)
 
         if not arduino_plant:

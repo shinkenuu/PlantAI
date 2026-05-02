@@ -9,13 +9,13 @@ from plants.repositories.file import FilePlantRepository
 
 @lru_cache(maxsize=1)
 def get_plant_repository(
-    repository_backend: str = settings.repository_backend,
+    repository_backend: str = settings.plant_io.repository_backend,
 ) -> BasePlantRepository:
     logging.info(f"Selected {repository_backend=}")
 
     if repository_backend.lower() == "arduino":
         arduino_repository = ArduinoPlantRepository()
-        arduino_repository.restore_plants_from_json()
+        arduino_repository.setup_plant_pins()
         return arduino_repository
 
     return FilePlantRepository()
