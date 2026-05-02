@@ -9,7 +9,7 @@ test-agents:
 
 .PHONY: setup-cron
 setup-cron:
-	@(crontab -l 2>/dev/null | grep -v collector; echo "*/10 * * * * cd $(PWD) && uv run python plants/io/collector.py >> sensor_readings.log 2>&1") | crontab -
+	@(crontab -l 2>/dev/null | grep -v collector; echo "*/10 * * * * cd $(PWD) && scripts/log_plant_sensor_readings.sh") | crontab -
 	@echo "Cron job installed (every 10 min):"
 	@crontab -l | grep collector
 

@@ -24,8 +24,8 @@ logging.basicConfig(
 )
 
 
-def load_plants(db_path: Path) -> list[dict]:
-    with open(db_path) as f:
+def load_plants(pings_json_path: Path) -> list[dict]:
+    with open(pings_json_path) as f:
         return json.load(f)
 
 
@@ -36,7 +36,7 @@ def sync_plants_with_arduino(
         pins = None
         if "sensor" in plant:
             pins = {
-                "soil": plant.sensor.soil_pin,
+                "soil": plant.soil_moisture,
                 "dht": plant.sensor.dht_pin,
                 "light": plant.sensor.light_pin,
             }
@@ -64,7 +64,7 @@ def read_plants_sensors(
     return arduino_plants
 
 
-def log_plants_sensor_readings(
+def main(
     plants: list[arduino.ArduinoPlant],
     sensor_log_path: Path,
 ) -> None:
@@ -87,11 +87,11 @@ def main(settings: Settings | None = None):
 
     settings = settings or Settings()
 
-    loaded_plants = load_plants()
+    loaded_plants = load_plants(pings_json_path=settings.plant_io.pins_json_path)
     sync_plants_with_arduino(loaded_plants)
 
     read_plants = read_plants_sensors(loaded_plants)
-    log_plants_sensor_readings(read_plants)
+    main(read_plants)
 
 
 if __name__ == "__main__":
