@@ -25,7 +25,6 @@ _serial = None
 
 
 class ArduinoPlant(TypedDict):
-    id: str
     name: str
     soil_moisture: float
     temperature: float

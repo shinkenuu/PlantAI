@@ -2,7 +2,6 @@ from unittest import mock
 
 from tests.plants.factories import PlantFactory
 from tests.plants.io.factories import ArduinoPlantFactory
-# from tests.plants.repositories.arduino.assertions import plant_equals_arduino_plant
 
 
 @mock.patch("plants.repositories.arduino._arduino")
