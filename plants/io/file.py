@@ -14,7 +14,9 @@ def list_plants(*args) -> list[Plant]:
 
     plants = [Plant(**plant_json) for plant_json in plants_json]
 
-    logging.info(f"Read {len(plants)} plants in {settings.plant_io.file_repository_json_path}")
+    logging.info(
+        f"Read {len(plants)} plants in {settings.plant_io.file_repository_json_path}"
+    )
     return plants
 
 
