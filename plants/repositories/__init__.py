@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 from config import settings
 from plants.repositories._base import BasePlantRepository
@@ -9,20 +10,20 @@ _instances: dict[str, BasePlantRepository] = {}
 
 
 def get_plant_repository(
-    repository_backend: str = settings.repository_backend,
+    backend: str = settings.plant_io.repository_backend, pins_path: Path | None = None
 ) -> BasePlantRepository:
-    logging.info(f"Selected {repository_backend=}")
+    logging.info(f"Selected {backend=}")
 
-    if repository_backend in _instances:
-        return _instances[repository_backend]
+    if backend in _instances:
+        return _instances[backend]
 
-    if repository_backend.lower() == "arduino":
+    if backend.lower() == "arduino":
         repo = ArduinoPlantRepository()
         repo.restore_plants_from_json()
     else:
         repo = FilePlantRepository()
 
-    _instances[repository_backend] = repo
+    _instances[backend] = repo
     return repo
 
 

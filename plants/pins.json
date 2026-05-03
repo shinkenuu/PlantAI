@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Lillian",
+        "scientific_name": "Spathiphyllum wallissi",
+        "sensor": {
+            "soil_pin": 54,
+            "dht_pin": 53,
+            "light_pin": 55
+        }
+    },
+    {
+        "id": 2,
+        "name": "Poderosa",
+        "scientific_name": "Dieffenbachia Seguine",
+        "sensor": {
+            "soil_pin": 55,
+            "dht_pin": 53,
+            "light_pin": 55
+        }
+    }
+]

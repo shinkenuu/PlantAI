@@ -64,6 +64,10 @@ PlantAI enables plants to meet AI for self-caring, self-knowledge, and improved 
 - `repositories/` - Repository pattern for data storage
 - `schemas.py` - Pydantic models for Plant and Sensor data
 
+#### Arduino Sensor Pin Sharing
+
+Sensors can be physically shared across multiple plants (e.g., a single DHT sensor in the same room measures air temperature/humidity for several plants). In `plants/db.json`, multiple plants may reference the same `dht_pin`, `soil_pin`, or `light_pin`. This is intentional — the Arduino firmware reads from these shared sensors and reports the same value for each plant that uses them.
+
 ### Knowledge Layer (`knowledge/`)
 
 - `care_guides.py` - Care guide tools from MongoDB

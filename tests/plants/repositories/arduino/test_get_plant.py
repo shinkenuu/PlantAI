@@ -14,7 +14,7 @@ def test_calls_arduino_io_retrieve(arduino_io_mock, arduino_plant_repository):
     arduino_io_mock.retrieve.return_value = arduino_plant_1
 
     # ACT
-    arduino_plant_repository.get_plant(plant_1.name)
+    arduino_plant_repository.get_plant(plant_1.name, avoid_cache=True)
 
     # ASSERT
     arduino_io_mock.retrieve.assert_called_once_with(plant_1.name)

@@ -7,14 +7,14 @@ readme = "README.md"
 requires-python = ">=3.12"
 
 dependencies = [
+    "langchain-ollama>=0.2.0,<0.3.0",
+    "langchain-openai>=0.3.35",
+    "langgraph>=0.2.34,<0.3.0",
+    "opik>=1.10.54",
     "pydantic>=2.9.0,<3.0.0",
     "pydantic-settings>=2.5.0,<3.0.0",
-    "pyserial>=3.5,<4.0",
-    "langgraph>=0.2.34,<0.3.0",
     "pymongo>=4.11,<5.0",
-    "langchain-ollama>=0.2.0,<0.3.0",
-    "opik>=1.10.54",
-    "langchain-openai>=0.3.35",
+    "pyserial>=3.5,<4.0",
 ]
 
 [tool.pytest.ini_options]

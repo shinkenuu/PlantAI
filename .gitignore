@@ -16,3 +16,7 @@
 
 # DeepEval
 .deepeval*
+
+# Logs
+*.log
+sensors.jsonl
