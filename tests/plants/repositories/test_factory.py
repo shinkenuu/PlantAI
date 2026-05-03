@@ -20,15 +20,15 @@ def test_returns_same_instance_on_repeated_calls():
 
 def test_returns_arduino_repository_when_requested():
     reset_plant_repository()
-    with mock.patch.object(ArduinoPlantRepository, "restore_plants_from_json"):
-        repo = get_plant_repository(repository_backend="arduino")
+    with mock.patch.object(ArduinoPlantRepository, "setup_plant_pins"):
+        repo = get_plant_repository(backend="arduino")
     assert isinstance(repo, ArduinoPlantRepository)
 
 
 def test_per_backend_singletons_are_independent():
     reset_plant_repository()
-    file_repo = get_plant_repository(repository_backend="file")
-    file_repo2 = get_plant_repository(repository_backend="file")
+    file_repo = get_plant_repository(backend="file")
+    file_repo2 = get_plant_repository(backend="file")
     assert file_repo is file_repo2
 
 

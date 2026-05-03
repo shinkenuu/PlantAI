@@ -23,6 +23,7 @@ TIMEOUT = 5  # Increase empirically when DEBUG tells there is no bytes waiting f
 
 _serial = None
 
+
 class Plant(TypedDict):
     name: str
     soil_moisture: float
