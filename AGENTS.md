@@ -32,8 +32,8 @@ PlantAI enables plants to meet AI for self-caring, self-knowledge, and improved 
 - Skip hardware tests: `pytest -m "not arduino"`
 - Skip LLM tests: `pytest -m "not llm"`
 - Focus on specific test: `pytest -k "<test name>"`
-
-### Test Structure
+    
+### Test Structure  
 
 - `tests/plants/` - Unit tests for plant data layer
 - `tests/plantai/agents/` - Agent tests using deepeval
