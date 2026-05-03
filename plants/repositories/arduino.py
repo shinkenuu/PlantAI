@@ -25,7 +25,7 @@ class ArduinoPlantRepository(BasePlantRepository):
             plant = Plant(**plant_json)
             self.create(plant)
 
-    def get_plant(self, name: str) -> Plant:
+    def get_plant(self, name: str) -> Plant | None:
         arduino_plant = _arduino.retrieve(name)
 
         if not arduino_plant:
@@ -61,7 +61,7 @@ class ArduinoPlantRepository(BasePlantRepository):
         self._cache[plant.name] = plant
         return plant
 
-    def delete(self, name: str) -> Plant:
+    def delete(self, name: str) -> _arduino.ArduinoPlant:
         arduino_plant = _arduino.delete(name)
 
         if not arduino_plant:

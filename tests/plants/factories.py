@@ -22,7 +22,6 @@ class PlantFactory(factory.Factory):
     class Meta:
         model = Plant
 
-    id = factory.Sequence(lambda n: n)
     name = factory.Faker("first_name")
     scientific_name = factory.Faker("word")
     actual_sensor = factory.SubFactory(SensorFactory)

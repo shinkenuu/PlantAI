@@ -12,23 +12,10 @@ dependencies = [
     "pyserial>=3.5,<4.0",
     "langgraph>=0.2.34,<0.3.0",
     "pymongo>=4.11,<5.0",
-]
-
-# Optional runtime extras — install with: uv sync --extra ollama
-[project.optional-dependencies]
-ollama = [
     "langchain-ollama>=0.2.0,<0.3.0",
+    "opik>=1.10.54",
+    "langchain-openai>=0.3.35",
 ]
-openai = [
-    "langchain-openai>=0.2.2,<0.3.0",
-]
-tracing = [
-    "opik>=1.8.11,<2.0",
-]
-
-[project.scripts]
-# Run the agent from the command line: uv run plantai
-plantai = "prototype:main"
 
 [tool.pytest.ini_options]
 markers = [

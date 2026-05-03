@@ -5,7 +5,7 @@
 ## Quick Start
 
 ```python
-# Get the configured repository (file or arduino, LRU-cached singleton)
+# Get the configured repository (file or arduino, per-backend singleton)
 from plants.repositories import get_plant_repository
 repo = get_plant_repository()
 
@@ -105,7 +105,7 @@ repo = get_plant_repository()
 repo = get_plant_repository(repository_backend="arduino")
 ```
 
-**Note**: This function is `@lru_cache(maxsize=1)` — returns the same instance per backend.
+Returns a per-backend singleton instance. Use `reset_plant_repository()` to clear the cache (useful in tests).
 
 #### `BasePlantRepository` (Abstract)
 

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import Field, MongoDsn
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     perenual_api_key: str | None = None  # fixed typo: was PERUNIAL
 
     # Database
-    dodder_database_uri: MongoDsn = Field(
+    dodder_database_uri: str = Field(
         default="mongodb://root:toor@127.0.0.1:27017/?authSource=admin",
         description="MongoDB connection URI. Override via DODDER_DATABASE_URI env var.",
     )

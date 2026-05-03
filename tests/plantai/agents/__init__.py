@@ -30,7 +30,7 @@ def get_called_tool_calls(messages: list[BaseMessage]) -> list[ToolCall]:
     return tool_calls
 
 
-def get_called_tools_contents(messages: list[BaseMessage]) -> list[ToolMessage]:
+def get_called_tools_contents(messages: list[BaseMessage]) -> list[str]:
     return [
         tool_message.content
         for tool_message in messages

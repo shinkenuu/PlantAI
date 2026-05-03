@@ -3,11 +3,11 @@ import logging
 import pymongo
 
 from knowledge.schemas import PictureThisAIPlantWiki, PerenualSpeciesGuide
-from config import DODDER_DATABASE_URI
+from config import settings
 
 
 class DodderDatabase:
-    def __init__(self, uri: str = DODDER_DATABASE_URI):
+    def __init__(self, uri: str = settings.dodder_database_uri):
         self._client = pymongo.MongoClient(uri)
         self.picturethisai = self._client["picturethisai"]
         self.penerual = self._client["perenual"]

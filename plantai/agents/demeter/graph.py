@@ -1,6 +1,7 @@
 from langchain_core.messages import SystemMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, MessagesState, START, END
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
 
 from plantai.agents.demeter.tools import TOOLS
@@ -81,7 +82,7 @@ Assistant:
 class DemeterState(MessagesState): ...
 
 
-def build_graph(debug: bool = False, **kwargs) -> None:
+def build_graph(debug: bool = False, **kwargs) -> CompiledStateGraph:
     graph_builder = StateGraph(DemeterState)
 
     graph_builder.add_node("call_llm", _call_llm)

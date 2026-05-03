@@ -129,7 +129,7 @@ repository_backend: Literal["file", "arduino"] = "file"
 
 Override via environment variable: `REPOSITORY_BACKEND=arduino`
 
-The factory function `plants.repositories.get_plant_repository()` is **LRU-cached** (singleton per backend), so repeated calls return the same instance.
+The factory function `plants.repositories.get_plant_repository()` returns a per-backend singleton, so repeated calls with the same backend return the same instance.
 
 ---
 
