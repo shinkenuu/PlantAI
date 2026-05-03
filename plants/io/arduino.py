@@ -23,14 +23,17 @@ TIMEOUT = 5  # Increase empirically when DEBUG tells there is no bytes waiting f
 
 _serial = None
 
-
-class ArduinoPlant(TypedDict):
-    id: str
+class Plant(TypedDict):
     name: str
     soil_moisture: float
     temperature: float
     humidity: float
     light: float
+
+    # Pins
+    soil: int | None = None
+    dht: int | None = None
+    light: int | None = None
 
 
 class Command(StrEnum):
@@ -40,7 +43,7 @@ class Command(StrEnum):
     DELETE = "-"
 
 
-def list_() -> list[ArduinoPlant]:
+def list_() -> list[Plant]:
     logging.info("Listing plants with Arduino")
 
     plants = _communicate(command=Command.LIST, plant_name="")
@@ -50,7 +53,7 @@ def list_() -> list[ArduinoPlant]:
     return plants
 
 
-def retrieve(name: str) -> ArduinoPlant | None:
+def retrieve(name: str) -> Plant | None:
     logging.info(f"Retrieving plant with {name=}")
 
     if not name:
@@ -62,7 +65,7 @@ def retrieve(name: str) -> ArduinoPlant | None:
     return plant
 
 
-def create(name: str, pins: dict[str, int] | None = None) -> ArduinoPlant:
+def create(name: str, pins: dict[str, int] | None = None) -> Plant:
     logging.info(f"Creating plant with {name=} and {pins=}")
 
     if not name:
@@ -74,7 +77,7 @@ def create(name: str, pins: dict[str, int] | None = None) -> ArduinoPlant:
     return plant
 
 
-def delete(name: str) -> ArduinoPlant:
+def delete(name: str) -> Plant:
     logging.info(f"Deleting plant with {name=}")
 
     if not name:
@@ -88,7 +91,7 @@ def delete(name: str) -> ArduinoPlant:
 
 def _communicate(
     command: str, plant_name: str, kwargs: dict | None = None
-) -> ArduinoPlant | list[ArduinoPlant]:
+) -> Plant | list[Plant]:
     message_to_serial = command
 
     if kwargs:

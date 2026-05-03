@@ -1,8 +1,8 @@
 from plants.schemas import Plant
-from plants.io.arduino import ArduinoPlant
+from plants.io.arduino import Plant
 
 
-def plant_equals_arduino_plant(plant: Plant, arduino_plant: ArduinoPlant):
+def plant_equals_arduino_plant(plant: Plant, arduino_plant: Plant):
     assert plant.name == arduino_plant["name"]
     assert plant.actual_sensor.soil_humidity == arduino_plant["soil_moisture"]
     assert plant.actual_sensor.air_temperature == arduino_plant["temperature"]

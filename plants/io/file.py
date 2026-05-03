@@ -6,15 +6,17 @@ from plants.schemas import Plant
 
 
 def list_plants(*args) -> list[Plant]:
-    logging.info(f"Reading plants in {settings.file_repository_json_path}")
+    logging.info(f"Reading plants in {settings.plant_io.file_repository_json_path}")
     plants = []
 
-    with open(settings.file_repository_json_path) as file:
+    with open(settings.plant_io.file_repository_json_path) as file:
         plants_json = json.load(file)
 
     plants = [Plant(**plant_json) for plant_json in plants_json]
 
-    logging.info(f"Read {len(plants)} plants in {settings.file_repository_json_path}")
+    logging.info(
+        f"Read {len(plants)} plants in {settings.plant_io.file_repository_json_path}"
+    )
     return plants
 
 

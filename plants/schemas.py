@@ -1,23 +1,30 @@
 from pydantic import BaseModel, Field
 
+from plants.io.arduino import Plant as ArduinoPlant
+
 
 MAX_ARDUINO_PIN = 69
 
 
 class Sensor(BaseModel):
-    air_humidity: float = Field(
+    air_humidity: float | None = Field(
+        default=None,
         description="0% (completely dry) to 100% (completely saturated with moisture)",
     )
-    air_temperature: float = Field(
+    air_temperature: float | None = Field(
+        default=None,
         description="measured in Celsius",
     )
-    soil_humidity: float = Field(
+    soil_humidity: float | None = Field(
+        default=None,
         description="0% (completely dry) to 100% (saturated soil)",
     )
-    soil_ph: float = Field(
+    soil_ph: float | None = Field(
+        default=None,
         description="0 (highly acidic) to 14 (highly alkaline)",
     )
-    light_level: int = Field(
+    light_level: int | None = Field(
+        default=None,
         description="measured in lux",
     )
 
@@ -49,14 +56,17 @@ class Sensor(BaseModel):
 
         return pins
 
+    def update_from(self, arduino_plant: ArduinoPlant):
+        self.soil_humidity = arduino_plant["soil_moisture"]
+        self.air_temperature = arduino_plant["temperature"]
+        self.air_humidity = arduino_plant["humidity"]
+        self.light_level = arduino_plant["light"]
+
 
 class Plant(BaseModel):
     name: str
     scientific_name: str
     sensor: Sensor | None = None
-    actual_sensor: Sensor | None = None
-    ideal_min_sensor: Sensor | None = None
-    ideal_max_sensor: Sensor | None = None
 
     def __str__(self):
         model_dump = self.model_dump_json(exclude_none=True)
