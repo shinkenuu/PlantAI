@@ -12,6 +12,8 @@ dependencies = [
     "pyserial>=3.5,<4.0",
     "langgraph>=0.2.34,<0.3.0",
     "pymongo>=4.11,<5.0",
+    "typer>=0.23.1",
+    "rich>=13.9.4",
 ]
 
 # Optional runtime extras — install with: uv sync --extra ollama

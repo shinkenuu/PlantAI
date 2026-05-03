@@ -16,3 +16,6 @@
 
 # DeepEval
 .deepeval*
+
+# Logs
+*.log

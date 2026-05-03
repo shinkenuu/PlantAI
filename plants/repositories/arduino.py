@@ -4,7 +4,7 @@ from pathlib import Path
 
 from plants.io import arduino as _arduino
 from plants.repositories._base import BasePlantRepository
-from plants.schemas import Plant
+from plants.schemas import Plant, Sensor
 
 
 class ArduinoPlantRepository(BasePlantRepository):
@@ -19,8 +19,12 @@ class ArduinoPlantRepository(BasePlantRepository):
 
         logging.info(f"Read {len(pins)} plants in {pins_path}")
 
-        for plant_json in pins:
-            plant = Plant(**plant_json)
+        for plant_pinout in pins:
+            sensor_pinout = plant_pinout.pop("sensor")
+            sensor = Sensor.model_validate(sensor_pinout)
+
+            plant = Plant(sensor=sensor, **plant_pinout)
+
             self.create(plant)
 
     def get_plant(self, name: str, avoid_cache: bool = False) -> Plant:
@@ -71,14 +75,10 @@ class ArduinoPlantRepository(BasePlantRepository):
         self._cache.pop(name, None)
         return arduino_plant
 
-    def _update_cache(self, arduino_plant: _arduino.ArduinoPlant) -> Plant:
+    def _update_cache(self, arduino_plant: _arduino.Plant) -> Plant:
         plant = self._cache[arduino_plant["name"]]
-        merge_plant_with_arduino_plant(plant, arduino_plant)
+
+        if plant.sensor:
+            plant.sensor.update_from(arduino_plant)
+
         return plant
-
-
-def merge_plant_with_arduino_plant(plant: Plant, arduino_plant: _arduino.ArduinoPlant):
-    plant.actual_sensor.soil_humidity = arduino_plant["soil_moisture"]
-    plant.actual_sensor.air_temperature = arduino_plant["temperature"]
-    plant.actual_sensor.air_humidity = arduino_plant["humidity"]
-    plant.actual_sensor.light_level = arduino_plant["light"]
