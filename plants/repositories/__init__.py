@@ -10,20 +10,22 @@ _instances: dict[str, BasePlantRepository] = {}
 
 
 def get_plant_repository(
-    backend: str = settings.plant_io.repository_backend, pins_path: Path | None = None
+    backend: str = settings.plant_io.repository_backend,
+    plants_path: Path = settings.plant_io.plants_json_path,
 ) -> BasePlantRepository:
     logging.info(f"Selected {backend=}")
 
     if backend in _instances:
         return _instances[backend]
 
+    repo = FilePlantRepository(file_path=plants_path)
+
     if backend.lower() == "arduino":
+        plants = repo.list_plants()
         repo = ArduinoPlantRepository()
 
-        if pins_path is not None:
-            repo.setup_plant_pins(pins_path=pins_path)
-    else:
-        repo = FilePlantRepository()
+        for plant in plants:
+            repo.create(plant)
 
     _instances[backend] = repo
     return repo

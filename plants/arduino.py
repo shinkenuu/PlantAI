@@ -9,32 +9,19 @@ from enum import StrEnum
 import json
 import logging
 from time import sleep
-from typing import TypedDict, cast
 
 from serial import Serial
 
-# Increase when facing errors AND the L Led (pin 13) blinks once then fades
-RESET_DELAY = 1
+from plants.constants import (
+    RESET_DELAY,
+    PORT,
+    BAUD_RATE,
+    TIMEOUT,
+)
+from plants.schemas import Plant, Pinout
 
-# Change these according to your Arduino setup
-PORT = "/dev/ttyACM0"
-BAUD_RATE = 115200
-TIMEOUT = 5  # Increase empirically when DEBUG tells there is no bytes waiting for either Tx and Rx
 
 _serial = None
-
-
-class Plant(TypedDict):
-    name: str
-    soil_moisture: float
-    temperature: float
-    humidity: float
-    light: float
-
-    # Pins
-    soil: int | None
-    dht: int | None
-    light: int | None
 
 
 class Command(StrEnum):
@@ -45,12 +32,14 @@ class Command(StrEnum):
 
 
 def list_() -> list[Plant]:
-    logging.info("Listing plants with Arduino")
+    logging.info("Listing plants")
 
-    response = _communicate(command=Command.LIST, plant_name="")
-    plants = response.get("plants", [])
+    plants = _communicate(command=Command.LIST, plant_name="")
 
-    logging.debug(f"Listed {len(plants)} plants with Arduino")
+    plants = plants.get("plants", [])
+    plants = [Plant.model_validate(plant) for plant in plants]
+
+    logging.debug(f"Listed {len(plants)} plants")
     return plants
 
 
@@ -62,39 +51,50 @@ def retrieve(name: str) -> Plant | None:
 
     plant = _communicate(command=Command.RETRIEVE, plant_name=name)
 
-    logging.debug(f"Retrieved plant {plant}")
-    return cast(Plant, plant) if plant else None
+    plant = Plant.model_validate(plant)
+
+    logging.debug(f"Retrieved {plant=}")
+    return plant if plant else None
 
 
-def create(name: str, pins: dict[str, int] | None = None) -> Plant:
-    logging.info(f"Creating plant with {name=} and {pins=}")
+def create(name: str, pinout: Pinout) -> Plant:
+    logging.info(f"Creating plant with {name=} and {pinout=}")
 
     if not name:
         raise ValueError("No plant name provided")
 
-    plant = _communicate(command=Command.CREATE, plant_name=name, kwargs=pins)
+    payload_kwargs = pinout.model_dump()
+    plant = _communicate(
+        command=Command.CREATE,
+        plant_name=name,
+        payload_kwargs=payload_kwargs,
+    )
 
-    logging.debug(f"Created plant {plant}")
-    return cast(Plant, plant)
+    plant = Plant.model_validate(plant)
+
+    logging.debug(f"Created {plant=}")
+    return plant
 
 
-def delete(name: str) -> Plant:
+def delete(name: str) -> None:
     logging.info(f"Deleting plant with {name=}")
 
     if not name:
         raise ValueError("No plant name provided")
 
-    plant = _communicate(command=Command.DELETE, plant_name=name)
+    _communicate(command=Command.DELETE, plant_name=name)
 
-    logging.debug(f"Deleted plant {plant}")
-    return cast(Plant, plant)
+    logging.debug(f"Deleted plant with {name=}")
+    return
 
 
-def _communicate(command: str, plant_name: str, kwargs: dict | None = None) -> dict:
+def _communicate(
+    command: str, plant_name: str, payload_kwargs: dict | None = None
+) -> dict:
     message_to_serial = command
 
-    if kwargs:
-        payload = {"name": plant_name, **kwargs}
+    if payload_kwargs:
+        payload = {"name": plant_name, **payload_kwargs}
         message_to_serial += json.dumps(payload)
 
     else:

@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -6,11 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class PlantIO(BaseModel):
     repository_backend: Literal["file", "arduino"] = "file"
-    arduino_repository_json_path: str = "./plants/io/arduino_plants.json"
-    file_repository_json_path: str = "./plants/io/local_plants.json"
-
-    pins_json_path: str = "./plants/pins.json"
-    sensor_log_path: str = "./sensor_readings.log"
+    plants_json_path: Path = Path("./plants/plants.json")
 
 
 class Settings(BaseSettings):

@@ -44,7 +44,7 @@ def read_plants_sensors(
     ),
     log_path: Annotated[Path, typer.Option(help="Log path")] = Path("sensors.jsonl"),
 ):
-    plant_repository = get_plant_repository(backend=backend, pins_path=pins_path)
+    plant_repository = get_plant_repository(backend=backend, plants_path=pins_path)
     plants = plant_repository.list_plants()
 
     if log_path:

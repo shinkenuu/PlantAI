@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Lillian",
+        "scientific_name": "Spathiphyllum wallissi",
+        "pinout": {
+            "soil": 54,
+            "dht": 53,
+            "light": 55
+        }
+    },
+    {
+        "name": "Poderosa",
+        "scientific_name": "Dieffenbachia Seguine",
+        "pinout": {
+            "soil": 55,
+            "dht": 53,
+            "light": 55
+        }
+    }
+]

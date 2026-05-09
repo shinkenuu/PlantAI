@@ -1,31 +1,11 @@
-import json
-import logging
-from pathlib import Path
-
-from plants.io import arduino as _arduino
+from plants import arduino as _arduino
 from plants.repositories._base import BasePlantRepository
-from plants.schemas import Plant, Sensor
+from plants.schemas import Plant
 
 
 class ArduinoPlantRepository(BasePlantRepository):
     def __init__(self) -> None:
         self._cache: dict[str, Plant] = {}
-
-    def setup_plant_pins(self, pins_path: Path):
-        logging.info(f"Reading plant's pins in {pins_path}")
-
-        with open(pins_path) as file:
-            pins = json.load(file)
-
-        logging.info(f"Read {len(pins)} plants in {pins_path}")
-
-        for plant_pinout in pins:
-            sensor_pinout = plant_pinout.pop("sensor")
-            sensor = Sensor.model_validate(sensor_pinout)
-
-            plant = Plant(sensor=sensor, **plant_pinout)
-
-            self.create(plant)
 
     def get_plant(self, name: str) -> Plant | None:
         arduino_plant = _arduino.retrieve(name)
@@ -46,17 +26,10 @@ class ArduinoPlantRepository(BasePlantRepository):
         return plants
 
     def create(self, plant: Plant) -> Plant:
-        sensor_pins = None
+        if not plant.pinout:
+            raise ValueError("Plant must have pinout set to be created")
 
-        if plant.sensor:
-            sensor_pins = {
-                "soil": plant.sensor.soil_pin,
-                "dht": plant.sensor.dht_pin,
-                "light": plant.sensor.light_pin,
-            }
-            sensor_pins = {k: v for k, v in sensor_pins.items() if v is not None}
-
-        arduino_plant = _arduino.create(plant.name, pins=sensor_pins)
+        arduino_plant = _arduino.create(plant.name, pinout=plant.pinout)
 
         if not arduino_plant:
             raise RuntimeError("Failed to create arduino plant")
@@ -76,9 +49,5 @@ class ArduinoPlantRepository(BasePlantRepository):
         return cached_plant
 
     def _update_cache(self, arduino_plant: _arduino.Plant) -> Plant:
-        plant = self._cache[arduino_plant["name"]]
-
-        if plant.sensor:
-            plant.sensor.update_from(arduino_plant)
-
-        return plant
+        self._cache[arduino_plant.name] = arduino_plant
+        return arduino_plant
