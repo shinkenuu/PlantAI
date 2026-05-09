@@ -1,21 +1,15 @@
 import factory
 
-from plants.schemas import Plant, Sensor
+from plants.schemas import Pinout, Plant
 
 
-class SensorFactory(factory.Factory):
+class PinoutFactory(factory.Factory):
     class Meta:
-        model = Sensor
+        model = Pinout
 
-    air_humidity = factory.Faker("pyfloat", min_value=0, max_value=100)
-    air_temperature = factory.Faker("pyfloat", min_value=0, max_value=50)
-    soil_humidity = factory.Faker("pyfloat", min_value=0, max_value=100)
-    soil_ph = factory.Faker("pyfloat", min_value=1, max_value=14)
-    light_level = factory.Faker("pyint", min_value=0, max_value=10_000)
-
-    soil_pin = None
-    dht_pin = None
-    light_pin = None
+    soil = factory.Faker("pyint", min_value=0, max_value=69)
+    dht = factory.Faker("pyint", min_value=0, max_value=69)
+    light = factory.Faker("pyint", min_value=0, max_value=69)
 
 
 class PlantFactory(factory.Factory):
@@ -23,7 +17,4 @@ class PlantFactory(factory.Factory):
         model = Plant
 
     name = factory.Faker("first_name")
-    scientific_name = factory.Faker("word")
-    actual_sensor = factory.SubFactory(SensorFactory)
-    ideal_min_sensor = factory.SubFactory(SensorFactory)
-    ideal_max_sensor = factory.SubFactory(SensorFactory)
+    pinout = factory.SubFactory(PinoutFactory)

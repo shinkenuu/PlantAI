@@ -1,8 +1,9 @@
 from unittest import mock
 
 from plants.repositories import get_plant_repository, reset_plant_repository
-from plants.repositories.file import FilePlantRepository
 from plants.repositories.arduino import ArduinoPlantRepository
+from plants.repositories.file import FilePlantRepository
+from plants.schemas import Plant
 
 
 def test_returns_file_repository_by_default():
@@ -20,7 +21,10 @@ def test_returns_same_instance_on_repeated_calls():
 
 def test_returns_arduino_repository_when_requested():
     reset_plant_repository()
-    with mock.patch.object(ArduinoPlantRepository, "setup_plant_pins"):
+    with mock.patch(
+        "plants.repositories.arduino._arduino.create",
+        return_value=Plant(name="dummy"),
+    ):
         repo = get_plant_repository(backend="arduino")
     assert isinstance(repo, ArduinoPlantRepository)
 

@@ -1,17 +1,13 @@
 from unittest import mock
 
 from tests.plants.factories import PlantFactory
-from tests.plants.io.factories import ArduinoPlantFactory
 
 
 @mock.patch("plants.repositories.arduino._arduino")
 def test_calls_arduino_io_list_(arduino_io_mock, arduino_plant_repository):
     # ARRANGE
     plants = PlantFactory.build_batch(2)
-    arduino_plants = [ArduinoPlantFactory(name=plant.name) for plant in plants]
-
-    arduino_plant_repository._cache = {plant.name: plant for plant in plants}
-    arduino_io_mock.list_.return_value = arduino_plants
+    arduino_io_mock.list_.return_value = plants
 
     # ACT
     arduino_plant_repository.list_plants()
@@ -23,25 +19,28 @@ def test_calls_arduino_io_list_(arduino_io_mock, arduino_plant_repository):
 @mock.patch("plants.repositories.arduino._arduino")
 def test_updates_cache(arduino_io_mock, arduino_plant_repository):
     # ARRANGE
-    plants = PlantFactory.build_batch(1)
-    arduino_plants = [ArduinoPlantFactory(name=plant.name) for plant in plants]
-
-    arduino_plant_repository._cache = {plant.name: plant for plant in plants}
-    arduino_io_mock.list_.return_value = arduino_plants
+    plants = PlantFactory.build_batch(2)
+    arduino_io_mock.list_.return_value = plants
 
     # ACT
     arduino_plant_repository.list_plants()
 
     # ASSERT
-    for arduino_plant in arduino_plants:
-        cached_plant = arduino_plant_repository._cache[arduino_plant["name"]]
+    for plant in plants:
+        cached = arduino_plant_repository._cache[plant.name]
+        assert cached.name == plant.name
+        assert cached.soil_moisture == plant.soil_moisture
+        assert cached.temperature == plant.temperature
+        assert cached.humidity == plant.humidity
+        assert cached.light == plant.light
 
-        assert cached_plant.name == arduino_plant["name"]
 
-        if not cached_plant.sensor:
-            continue
+@mock.patch("plants.repositories.arduino._arduino")
+def test_returns_empty_list_when_arduino_has_no_plants(
+    arduino_io_mock, arduino_plant_repository
+):
+    arduino_io_mock.list_.return_value = []
 
-        assert cached_plant.sensor.soil_humidity == arduino_plant["soil_moisture"]
-        assert cached_plant.sensor.air_temperature == arduino_plant["temperature"]
-        assert cached_plant.sensor.air_humidity == arduino_plant["humidity"]
-        assert cached_plant.sensor.light_level == arduino_plant["light"]
+    result = arduino_plant_repository.list_plants()
+
+    assert result == []
