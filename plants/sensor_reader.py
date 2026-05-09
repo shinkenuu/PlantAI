@@ -1,7 +1,7 @@
 import logging
 
 from plants.io import arduino
-from schemas import Plant
+from plants.schemas import Plant
 
 
 def sync_plants_with_arduino(
@@ -17,8 +17,9 @@ def sync_plants_with_arduino(
             "dht": plant.sensor.dht_pin,
             "light": plant.sensor.light_pin,
         }
+        pins = {k: v for k, v in pins.items() if v is not None}
 
-        arduino.create(name=plant.name, pins=pins)
+        arduino.create(name=plant.name, pins=pins or None)
 
 
 def read_plants_sensors(
@@ -27,10 +28,10 @@ def read_plants_sensors(
     arduino_plants = []
 
     for plant in plants:
-        arduino_plant = arduino.retrieve(plant.name)
+        arduino_plant = arduino.retrieve(plant["name"])
 
         if not arduino_plant:
-            logging.warning(f"Failed to read plant: {plant.name}")
+            logging.warning(f"Failed to read plant: {plant['name']}")
             continue
 
         arduino_plants.append(arduino_plant)

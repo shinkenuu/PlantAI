@@ -19,7 +19,9 @@ def get_plant_repository(
 
     if backend.lower() == "arduino":
         repo = ArduinoPlantRepository()
-        repo.setup_plant_pins(pins_path=pins_path)
+
+        if pins_path is not None:
+            repo.setup_plant_pins(pins_path=pins_path)
     else:
         repo = FilePlantRepository()
 

@@ -31,23 +31,23 @@ class Sensor(BaseModel):
     soil_pin: int | None = Field(
         default=None,
         description="Arduino analog pin for soil moisture",
-        gte=0,
-        lte=MAX_ARDUINO_PIN,
+        ge=0,
+        le=MAX_ARDUINO_PIN,
     )
     dht_pin: int | None = Field(
         default=None,
         description="Arduino digital pin for DHT sensor",
-        gte=0,
-        lte=MAX_ARDUINO_PIN,
+        ge=0,
+        le=MAX_ARDUINO_PIN,
     )
     light_pin: int | None = Field(
         default=None,
         description="Arduino analog pin for light sensor",
-        gte=0,
-        lte=MAX_ARDUINO_PIN,
+        ge=0,
+        le=MAX_ARDUINO_PIN,
     )
 
-    def dump_pins(self) -> dict[str, int]:
+    def dump_pins(self) -> dict[str, int | None]:
         pins = {
             "dht": self.dht_pin,
             "soil": self.soil_pin,

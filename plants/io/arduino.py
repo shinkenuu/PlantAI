@@ -9,7 +9,7 @@ from enum import StrEnum
 import json
 import logging
 from time import sleep
-from typing import TypedDict
+from typing import TypedDict, cast
 
 from serial import Serial
 
@@ -32,9 +32,9 @@ class Plant(TypedDict):
     light: float
 
     # Pins
-    soil: int | None = None
-    dht: int | None = None
-    light: int | None = None
+    soil: int | None
+    dht: int | None
+    light: int | None
 
 
 class Command(StrEnum):
@@ -47,8 +47,8 @@ class Command(StrEnum):
 def list_() -> list[Plant]:
     logging.info("Listing plants with Arduino")
 
-    plants = _communicate(command=Command.LIST, plant_name="")
-    plants = plants.get("plants", [])
+    response = _communicate(command=Command.LIST, plant_name="")
+    plants = response.get("plants", [])
 
     logging.debug(f"Listed {len(plants)} plants with Arduino")
     return plants
@@ -63,7 +63,7 @@ def retrieve(name: str) -> Plant | None:
     plant = _communicate(command=Command.RETRIEVE, plant_name=name)
 
     logging.debug(f"Retrieved plant {plant}")
-    return plant
+    return cast(Plant, plant) if plant else None
 
 
 def create(name: str, pins: dict[str, int] | None = None) -> Plant:
@@ -75,7 +75,7 @@ def create(name: str, pins: dict[str, int] | None = None) -> Plant:
     plant = _communicate(command=Command.CREATE, plant_name=name, kwargs=pins)
 
     logging.debug(f"Created plant {plant}")
-    return plant
+    return cast(Plant, plant)
 
 
 def delete(name: str) -> Plant:
@@ -87,12 +87,10 @@ def delete(name: str) -> Plant:
     plant = _communicate(command=Command.DELETE, plant_name=name)
 
     logging.debug(f"Deleted plant {plant}")
-    return plant
+    return cast(Plant, plant)
 
 
-def _communicate(
-    command: str, plant_name: str, kwargs: dict | None = None
-) -> Plant | list[Plant]:
+def _communicate(command: str, plant_name: str, kwargs: dict | None = None) -> dict:
     message_to_serial = command
 
     if kwargs:

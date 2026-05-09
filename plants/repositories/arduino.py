@@ -54,6 +54,7 @@ class ArduinoPlantRepository(BasePlantRepository):
                 "dht": plant.sensor.dht_pin,
                 "light": plant.sensor.light_pin,
             }
+            sensor_pins = {k: v for k, v in sensor_pins.items() if v is not None}
 
         arduino_plant = _arduino.create(plant.name, pins=sensor_pins)
 
@@ -63,14 +64,16 @@ class ArduinoPlantRepository(BasePlantRepository):
         self._cache[plant.name] = plant
         return plant
 
-    def delete(self, name: str) -> _arduino.ArduinoPlant:
+    def delete(self, name: str) -> Plant | None:
+        cached_plant = self._cache.get(name)
+
         arduino_plant = _arduino.delete(name)
 
         if not arduino_plant:
             raise RuntimeError("Failed to delete arduino plant")
 
         self._cache.pop(name, None)
-        return arduino_plant
+        return cached_plant
 
     def _update_cache(self, arduino_plant: _arduino.Plant) -> Plant:
         plant = self._cache[arduino_plant["name"]]

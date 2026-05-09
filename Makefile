@@ -25,3 +25,4 @@ view-log:
 lint:
 	uv tool run ruff check . --fix
 	uv tool run ruff format .
+	uv tool run ty check .
