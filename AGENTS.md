@@ -24,7 +24,7 @@ PlantAI enables plants to meet AI for self-caring, self-knowledge, and improved 
 
 - `make test-plants` - Run plant unit tests (excludes arduino)
 - `make test-agents` - Run agent tests with deepeval
-- `make lint` - Run ruff linter with auto-fix
+- `make lint` - Run ruff linter with auto-fix and ty type-checker
 
 ### pytest Commands
 
@@ -41,9 +41,7 @@ PlantAI enables plants to meet AI for self-caring, self-knowledge, and improved 
 
 ## Linting
 
-- Run linter: `ruff check .`
-- Auto-fix: `ruff check . --fix`
-- Or use: `make lint`
+Use `uv tool run [TOOL]` to use `ruff` for linting and `ty` for type-checking when not using `make lint` for both on the entire codebase.
 
 ## Architecture
 
@@ -60,13 +58,12 @@ PlantAI enables plants to meet AI for self-caring, self-knowledge, and improved 
 
 ### Plants Data Layer (`plants/`)
 
-- `io/` - Input/output mechanisms (Arduino serial, JSON files)
 - `repositories/` - Repository pattern for data storage
-- `schemas.py` - Pydantic models for Plant and Sensor data
+- `schemas.py` - Pydantic models for Plant and Pinout data
 
 #### Arduino Sensor Pin Sharing
 
-Sensors can be physically shared across multiple plants (e.g., a single DHT sensor in the same room measures air temperature/humidity for several plants). In `plants/db.json`, multiple plants may reference the same `dht_pin`, `soil_pin`, or `light_pin`. This is intentional — the Arduino firmware reads from these shared sensors and reports the same value for each plant that uses them.
+Sensors can be physically shared across multiple plants (e.g., a single DHT sensor in the same room measures air temperature/humidity for several plants). In `plants/plants.json`, multiple plants may reference the same `dht`, `soil`, or `light` pinout. This is intentional — the Arduino firmware reads from these shared sensors and reports the same value for each plant that uses them.
 
 ### Knowledge Layer (`knowledge/`)
 
@@ -93,5 +90,5 @@ See `README.md` for curated plant care resources:
 ## PR Instructions
 
 - Title format: `[<module>] <Title>` (e.g., `[agents] Add new care guide tool`)
-- Always run `make lint` and `make test-plants` before committing
+- Always run `make lint` and `make test` before committing
 - Add or update tests for code changes
