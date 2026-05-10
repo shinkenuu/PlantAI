@@ -18,13 +18,13 @@ logging.basicConfig(
 app = typer.Typer()
 
 
-def _append_to_sensor_reading_log(plants: list[Plant], sensor_reading_path: Path):
-    logging.info(f"Dumping plants for logging into {sensor_reading_path}")
+def _append_to_log(plants: list[Plant], log_path: Path):
+    logging.info(f"Logging read plants into {log_path}")
 
     now_timestamp = datetime.now(UTC).isoformat()
-    sensor_reading_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(sensor_reading_path, "a", encoding="utf-8") as file:
+    with open(log_path, "a", encoding="utf-8") as file:
         for plant in plants:
             reading = {
                 "timestamp": now_timestamp,
@@ -37,18 +37,31 @@ def _append_to_sensor_reading_log(plants: list[Plant], sensor_reading_path: Path
 
 
 @app.command()
-def read_plants_sensors(
+def snapshot_plants(
     backend: Annotated[str, typer.Option(help="Repository backend")] = "arduino",
-    pins_path: Annotated[Path, typer.Option(help="Arduino pinout")] = Path(
-        "plants/pins.json"
-    ),
-    log_path: Annotated[Path, typer.Option(help="Log path")] = Path("sensors.jsonl"),
+    pinout_path: Annotated[
+        Path, typer.Option(help="Plants with pinout configuration")
+    ] = Path("plants/plants.json"),
+    log_path: Annotated[
+        Path | None, typer.Option(help="File to append read plants")
+    ] = None,
 ):
-    plant_repository = get_plant_repository(backend=backend, plants_path=pins_path)
-    plants = plant_repository.list_plants()
+    try:
+        plant_repository = get_plant_repository(
+            backend=backend, plants_path=pinout_path
+        )
+    except FileNotFoundError:
+        logging.error("Sensor config not found: %s", pinout_path)
+        raise typer.Exit(code=1)
+
+    try:
+        plants = plant_repository.list_plants()
+    except Exception:
+        logging.exception("Failed to read sensors from %s backend", backend)
+        raise typer.Exit(code=1)
 
     if log_path:
-        _append_to_sensor_reading_log(plants, log_path)
+        _append_to_log(plants=plants, log_path=log_path)
 
     return plants
 

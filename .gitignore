@@ -20,3 +20,4 @@
 # Logs
 *.log
 sensors.jsonl
+plants/sensors.jsonl
