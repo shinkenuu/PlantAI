@@ -7,12 +7,12 @@ PLANT_LOG="plants/sensors.jsonl"
 LOCKFILE="/tmp/plantai-snapshot.lock"
 ERROR_LOG="snapshot-errors.log"
 
-ARDUINO_POWER="uhubctl -l 1-1 -p 3"
+ARDUINO_POWER="uhubctl -l 1-1 -p 2"
 
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:/usr/sbin:$PATH"
 
 cleanup() {
-    $ARDUINO_POWER -a off >> "$ERROR_LOG" 2>&1
+    $ARDUINO_POWER -a 0 >> "$ERROR_LOG" 2>&1
 }
 trap cleanup EXIT
 
@@ -27,7 +27,7 @@ if [ ! -f "$PINOUT_FILE" ]; then
     exit 1
 fi
 
-if ! $ARDUINO_POWER -a on >> "$ERROR_LOG" 2>&1; then
+if ! $ARDUINO_POWER -a 1 >> "$ERROR_LOG" 2>&1; then
     echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] ERROR: Failed to power on Arduino" >> "$ERROR_LOG"
     exit 1
 fi

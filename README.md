@@ -23,6 +23,9 @@ Her name is inspired from [this music](https://www.youtube.com/watch?v=kbXJ6NNaO
 Communication with Arduino using its default serial UART.
 Here's the expected running [Arduino sketch](https://github.com/shinkenuu/arduino/blob/master/plantai)
 
+- RaspberryPi 3B
+
+Connected with and powering Arduino. Run [setup-raspberry-usb](scripts/setup-raspberry-usb.sh) or disable arduino power on/off in [snapshot-plants.sh](scripts/snapshot_plants.sh)
 
 ### Plant knowledge sources
 
